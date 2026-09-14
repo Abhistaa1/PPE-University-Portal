@@ -572,33 +572,29 @@
 
                 </div>
 
+                <!-- PROGRESS CONTROLS -->
+                <div class="clean-card progress-controls-card" style="margin-top:24px;">
+                    <div class="card-head">
+                        <span class="badge badge-sub">DATA</span>
+                        <span style="font-size:1.2rem;">⚙️</span>
+                    </div>
 
-            </div>
+                    <h4>Progress Controls</h4>
+
+                    <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
+                        Manage your lecture completion and watch history.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="reset-progress-btn"
+                        onclick="resetProgress()">
+                        <span>↻</span>
+                        <span>Reset Progress</span>
+                    </button>
+                </div>
 
         </section>
-        
-<!-- PROGRESS CONTROLS -->
-<div class="clean-card progress-controls-card" style="margin-top:24px;">
-    <div class="card-head">
-        <span class="badge badge-sub">DATA</span>
-        <span style="font-size:1.2rem;">⚙️</span>
-    </div>
-
-    <h4>Progress Controls</h4>
-
-    <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
-        Manage your lecture completion and watch history.
-    </p>
-
-    <button
-        class="reset-progress-btn"
-        onclick="resetProgress()">
-        <span>↻</span>
-        <span>Reset Progress</span>
-    </button>
-</div>
-
-</section>
 
 
         <!-- ========================================= -->
@@ -831,6 +827,21 @@
 <!-- ========================================= -->
 <!-- APP JAVASCRIPT -->
 <!-- ========================================= -->
+
+<script>
+    // Progress reset control
+    window.resetProgress = function () {
+        const confirmed = window.confirm(
+            "Reset all lecture completion and attendance history?"
+        );
+
+        if (!confirmed) return;
+
+        localStorage.removeItem("ppe_progress_state");
+        localStorage.removeItem("ppe_attendance_state");
+        window.location.reload();
+    };
+</script>
 
 <script src="./app.js"></script>
 
