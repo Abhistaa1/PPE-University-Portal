@@ -1,3 +1,34 @@
+// ========================================
+// PERSISTENT USER PROGRESS
+// ========================================
+
+const STORAGE_KEY = "ppe_completed_sessions";
+
+// Load saved progress
+function loadSavedProgress() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (error) {
+        console.error("Could not load saved progress:", error);
+        return {};
+    }
+}
+
+// Save progress
+function saveProgress(progress) {
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(progress)
+        );
+    } catch (error) {
+        console.error("Could not save progress:", error);
+    }
+}
+
+// Current completed sessions
+let completedSessions = loadSavedProgress();
+ 
 // =====================================================
 // PERSONAL UNIVERSITY PORTAL
 // app.js
