@@ -794,7 +794,27 @@ window.toggleDone =
 
         renderApp();
     };
+// RESET ALL PROGRESS
+window.resetProgress = function() {
+    const confirmed = confirm(
+        "Reset all progress?\n\n" +
+        "This will erase all watched lectures and completed sessions.\n" +
+        "Your syllabus, schedule, and lecture links will NOT be changed."
+    );
 
+    if (!confirmed) return;
+
+    progressState = {};
+    watchedState = {};
+
+    localStorage.removeItem('ppe_progress_state');
+    localStorage.removeItem('ppe_watched_state');
+
+    renderApp();
+    renderOverview();
+
+    alert("Progress has been reset.");
+};
 // =====================================================
 // LOAD SYLLABUS
 // =====================================================
