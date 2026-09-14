@@ -795,38 +795,125 @@ window.toggleDone =
         renderApp();
     };
 
-// RESET ALL PROGRESS
+
+// =====================================================
+// RESET PROGRESS
+// =====================================================
+
 window.resetProgress = function () {
     const confirmed = window.confirm(
         "Reset all progress?\n\n" +
-        "This will erase your watched lectures, attendance, " +
-        "and completed sessions.\n\n" +
+        "This will erase watched lectures and completed sessions.\n\n" +
         "Your syllabus and schedule will NOT be changed."
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+        return;
+    }
 
-    // Clear every progress-related storage used by the app
+    // Clear every progress store used by the app
     localStorage.removeItem("ppe_progress_state");
-    localStorage.removeItem("ppe_attendance_state");
     localStorage.removeItem("ppe_watched_state");
+    localStorage.removeItem("ppe_completed_sessions");
+    localStorage.removeItem("ppe_attendance_state");
 
-    // Clear in-memory variables only if they exist
-    if (typeof progressState !== "undefined") {
-        progressState = {};
-    }
+    // Reset in-memory state
+    progressState = {};
+    watchedState = {};
+    completedSessions = {};
 
-    if (typeof attendanceState !== "undefined") {
-        attendanceState = {};
-    }
+    // Rebuild the page
+    renderApp();
+    renderOverview();
 
-    if (typeof watchedState !== "undefined") {
-        watchedState = {};
-    }
+    // Return to Dossier
+    window.switchTab("profileTab");
 
-    // Reload the app so every counter/card is rebuilt from zero
-    window.location.reload();
+    window.alert("Progress has been reset.");
 };
+
+
+// =====================================================
+// DOSSIER RESET CONTROL
+// =====================================================
+
+// Automatically creates the Reset Progress card
+// inside the Dossier tab.
+function renderResetControl() {
+
+    const profileTab =
+        document.getElementById("profileTab");
+
+    if (!profileTab) {
+        return;
+    }
+
+    // Remove an existing copy first
+    const oldCard =
+        document.getElementById("resetProgressCard");
+
+    if (oldCard) {
+        oldCard.remove();
+    }
+
+    const card =
+        document.createElement("div");
+
+    card.id = "resetProgressCard";
+
+    card.className =
+        "clean-card progress-controls-card";
+
+    card.style.marginTop =
+        "24px";
+
+    card.style.marginBottom =
+        "110px";
+
+    card.innerHTML = `
+
+        <div class="card-head">
+
+            <span class="badge badge-sub">
+                DATA
+            </span>
+
+            <span style="font-size:1.2rem;">
+                ⚙️
+            </span>
+
+        </div>
+
+        <h4>
+            Progress Controls
+        </h4>
+
+        <p style="
+            color:var(--text-muted);
+            font-size:0.85rem;
+            line-height:1.5;
+        ">
+            Manage your lecture completion
+            and watch history.
+        </p>
+
+        <button
+            type="button"
+            class="reset-progress-btn"
+            onclick="resetProgress()"
+        >
+
+            <span>↻</span>
+
+            <span>
+                Reset Progress
+            </span>
+
+        </button>
+    `;
+
+    profileTab.appendChild(card);
+}
 // =====================================================
 // LOAD SYLLABUS
 // =====================================================
@@ -892,6 +979,8 @@ async function loadSyllabus() {
         renderApp();
 
         renderOverview();
+
+        renderResetControl();
 
     } catch (error) {
 
