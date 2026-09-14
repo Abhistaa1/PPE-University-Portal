@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal University Portal</title>
+
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="PPE">
+</head><body>
+
+<div class="mobile-frame">
+
+    <!-- TOP APP BAR -->
+    <header class="app-header">
+        <div class="user-meta">
+            <span class="sub-date" id="currentDateDisplay">
+                Monday, 14 September
+            </span>
+
+            <h2 class="greeting">
+                Welcome, Scholar
+            </h2>
+        </div>
+
+        <div class="avatar-badge">
+            <span>PPE</span>
+        </div>
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- ========================================= -->
+        <!-- TAB 1: TRACKER -->
+        <!-- ========================================= -->
+
+        <section id="trackerTab" class="tab-content active">
+
+            <div class="hero-metric-card">
+
+                <div class="hero-left">
+
+                    <span class="metric-title">
+                        Today's Progress
+                    </span>
+
+                    <div class="progress-bar-wrap">
+                        <div
+                            class="progress-fill"
+                            id="progressFill">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div
+                    class="hero-badge"
+                    id="completionRateBadge">
+                    0%
+                </div>
+
+            </div>
+
+
+            <!-- STAT SUMMARY ROW -->
+
+            <div class="section-row">
+                <h3>Semester Metrics</h3>
+            </div>
+
+            <div class="stats-row">
+
+                <div class="stat-pill">
+                    <span
+                        class="stat-val"
+                        id="statCompleted">
+                        0
+                    </span>
+
+                    <span class="stat-lbl">
+                        Completed
+                    </span>
+                </div>
+
+
+                <div class="stat-pill">
+                    <span
+                        class="stat-val"
+                        id="statRemaining">
+                        0
+                    </span>
+
+                    <span class="stat-lbl">
+                        Remaining
+                    </span>
+                </div>
+
+
+                <div class="stat-pill">
+                    <span
+                        class="stat-val"
+                        id="statCurrentWeek">
+                        W1
+                    </span>
+
+                    <span class="stat-lbl">
+                        Term Phase
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- WEEK SELECTOR -->
+
+            <div class="week-filter-row">
+
+                <h3>Curriculum</h3>
+
+                <div class="select-pill-wrapper">
+
+                    <select id="weekSelector">
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- COURSE TASK CARDS -->
+
+            <div
+                id="courseList"
+                class="cards-grid">
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================= -->
+        <!-- TAB 2: PLAYLIST DIRECTORY -->
+        <!-- ========================================= -->
+
+        <section
+            id="playlistTab"
+            class="tab-content">
+
+            <div class="section-row">
+                <h3>Primary Lecture Hubs</h3>
+            </div>
+
+
+            <div class="playlist-grid">
+
+
+                <!-- PHIL101 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            PHIL101
+                        </span>
+
+                        <span class="prof-tag">
+                            Zachary Fruhling
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Introduction to Logic
+                    </h4>
+
+                    <p>
+                        Formal logical structures, syllogisms,
+                        truth tables, and deductive calculus.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PL2uWqdcaf189i8r_Rh-1dFLmRjKN3EwDI"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- POLS101 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            POLS101
+                        </span>
+
+                        <span class="prof-tag">
+                            Yale University
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Basic Political Theory
+                    </h4>
+
+                    <p>
+                        Foundations of the state with Steven B. Smith:
+                        Plato, Hobbes, Locke, and Rousseau.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PL8D95DEA9B7DFE825"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- ECON101 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            ECON101
+                        </span>
+
+                        <span class="prof-tag">
+                            MIT OpenCourseWare
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Principles of Microeconomics
+                    </h4>
+
+                    <p>
+                        Prof. Jonathan Gruber’s Fall 2023 sequence
+                        on markets, welfare, and firm behavior.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PLUl4u3cNGP60V7HxLYRaJMbFzP77bzEjb"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- PHIL102 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            PHIL102
+                        </span>
+
+                        <span class="prof-tag">
+                            Jack Sanders
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        General Philosophy
+                    </h4>
+
+                    <p>
+                        Metaphysics, Cartesian skepticism,
+                        epistemology, and the nature of mind.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PLg4lEYaHO--SDCgjDUP1nQbn3_Fztv4LK"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- POLS102 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            POLS102
+                        </span>
+
+                        <span class="prof-tag">
+                            Yale University
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Power and Politics in Today's World
+                    </h4>
+
+                    <p>
+                        Prof. Ian Shapiro on regime changes,
+                        institutional stability, and post-Cold War politics.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- MATH101 -->
+
+                <div class="clean-card hub-card">
+
+                    <div class="card-head">
+
+                        <span class="badge badge-sub">
+                            MATH101
+                        </span>
+
+                        <span class="prof-tag">
+                            Lazarski Open Course
+                        </span>
+
+                    </div>
+
+                    <h4>
+                        Mathematics for Economics
+                    </h4>
+
+                    <p>
+                        Matrix operations, unconstrained &
+                        constrained optimization, and partial differentiation.
+                    </p>
+
+                    <a
+                        href="https://www.youtube.com/playlist?list=PL9aqlRevPSRDsivOFyJ9b3v1ujCwBLkHsE"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================= -->
+        <!-- TAB 3: MILESTONES & STUDENT -->
+        <!-- ========================================= -->
+
+        <section
+            id="profileTab"
+            class="tab-content">
+
+            <div class="section-row">
+                <h3>Academic Standing</h3>
+            </div>
+
+
+            <div class="clean-card profile-summary-card">
+
+                <div class="avatar-large">
+                    AF
+                </div>
+
+                <div class="profile-details">
+
+                    <h4>
+                        Muhamad Abhista Firdaus
+                    </h4>
+
+                    <span class="program-tag">
+                        Year 1 · Semester 1
+                    </span>
+
+                    <p class="institution">
+                        Curriculum: Oxford / Yale / MIT Standard
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                class="section-row"
+                style="margin-top: 24px;">
+
+                <h3>
+                    Core Milestones
+                </h3>
+
+            </div>
+
+
+            <div class="timeline-list">
+
+
+                <!-- WEEK 1 -->
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker complete">
+                    </div>
+
+                    <div class="timeline-body">
+
+                        <h5>
+                            Week 1: Quantitative & Formal Foundation
+                        </h5>
+
+                        <p>
+                            Deduction vs induction,
+                            supply-demand mechanics,
+                            and matrix formulations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- WEEK 4 -->
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker active">
+                    </div>
+
+                    <div class="timeline-body">
+
+                        <h5>
+                            Week 4: Modern Realpolitik Transition
+                        </h5>
+
+                        <p>
+                            Shift from ancient philosophy to Machiavelli;
+                            firm production costs and calculus limits.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- WEEK 7-8 -->
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker">
+                    </div>
+
+                    <div class="timeline-body">
+
+                        <h5>
+                            Week 7–8: Midterm Consolidation
+                        </h5>
+
+                        <p>
+                            Midterm self-examination; draft analytical essay
+                            on Hobbesian Sovereignty vs. Lockean Property.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- WEEK 12 -->
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker">
+                    </div>
+
+                    <div class="timeline-body">
+
+                        <h5>
+                            Week 12: Advanced Optimization & Regimes
+                        </h5>
+
+                        <p>
+                            Lagrange multipliers,
+                            asymmetric information problems,
+                            and democratic backsliding.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- WEEK 14 -->
+
+                <div class="timeline-item">
+
+                    <div class="timeline-marker">
+                    </div>
+
+                    <div class="timeline-body">
+
+                        <h5>
+                            Week 14: Semester Capstone
+                        </h5>
+
+                        <p>
+                            Complete full problem sets
+                            and final synthetic research thesis.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================= -->
+        <!-- TAB 4: SEMESTER OVERVIEW -->
+        <!-- ========================================= -->
+
+        <section
+            id="overviewTab"
+            class="tab-content">
+
+            <div class="section-row">
+
+                <h3>
+                    Master Syllabus Overview
+                </h3>
+
+            </div>
+
+            <div id="overviewContent">
+                <!-- Javascript will inject the accordions here -->
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ========================================= -->
+    <!-- FLOATING DOCK BOTTOM NAVIGATION -->
+    <!-- ========================================= -->
+
+    <nav class="bottom-nav">
+
+
+        <!-- TASKS -->
+
+        <button
+            class="nav-item active"
+            onclick="switchTab('trackerTab')">
+
+            <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2">
+                </rect>
+
+                <line
+                    x1="16"
+                    y1="2"
+                    x2="16"
+                    y2="6">
+                </line>
+
+                <line
+                    x1="8"
+                    y1="2"
+                    x2="8"
+                    y2="6">
+                </line>
+
+                <line
+                    x1="3"
+                    y1="10"
+                    x2="21"
+                    y2="10">
+                </line>
+
+            </svg>
+
+            <span>
+                Tasks
+            </span>
+
+        </button>
+
+
+
+        <!-- LECTURES -->
+
+        <button
+            class="nav-item"
+            onclick="switchTab('playlistTab')">
+
+            <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <polygon
+                    points="5 3 19 12 5 21 5 3">
+                </polygon>
+
+            </svg>
+
+            <span>
+                Lectures
+            </span>
+
+        </button>
+
+
+
+        <!-- SYLLABUS -->
+
+        <button
+            class="nav-item"
+            onclick="switchTab('overviewTab')">
+
+            <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <line
+                    x1="8"
+                    y1="6"
+                    x2="21"
+                    y2="6">
+                </line>
+
+                <line
+                    x1="8"
+                    y1="12"
+                    x2="21"
+                    y2="12">
+                </line>
+
+                <line
+                    x1="8"
+                    y1="18"
+                    x2="21"
+                    y2="18">
+                </line>
+
+                <line
+                    x1="3"
+                    y1="6"
+                    x2="3.01"
+                    y2="6">
+                </line>
+
+                <line
+                    x1="3"
+                    y1="12"
+                    x2="3.01"
+                    y2="12">
+                </line>
+
+                <line
+                    x1="3"
+                    y1="18"
+                    x2="3.01"
+                    y2="18">
+                </line>
+
+            </svg>
+
+            <span>
+                Syllabus
+            </span>
+
+        </button>
+
+
+
+        <!-- DOSSIER -->
+
+        <button
+            class="nav-item"
+            onclick="switchTab('profileTab')">
+
+            <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path
+                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
+                </path>
+
+                <circle
+                    cx="12"
+                    cy="7"
+                    r="4">
+                </circle>
+
+            </svg>
+
+            <span>
+                Dossier
+            </span>
+
+        </button>
+
+
+    </nav>
+
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- APP JAVASCRIPT -->
+<!-- ========================================= -->
+
+<script src="./app.js"></script>
+
+
+<!-- ========================================= -->
+<!-- PWA SERVICE WORKER -->
+<!-- ========================================= -->
+
+<script>
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                .register("./service-worker.js")
+                .then(() => {
+                    console.log("PWA service worker registered.");
+                })
+                .catch(error => {
+                    console.error(
+                        "PWA service worker registration failed:",
+                        error
+                    );
+                });
+
+        });
+
+    }
+</script>
+
+</body>
+</html>
