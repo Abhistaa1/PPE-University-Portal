@@ -467,3 +467,41 @@ body {
     border-radius: 0 16px 16px 0;
 }
 .week-content.expanded { display: block; }
+}
+.reset-progress-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.045);
+    color: var(--text-secondary);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.reset-progress-btn span:first-child {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.reset-progress-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.reset-progress-btn:active {
+    transform: scale(0.98);
+}
