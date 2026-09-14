@@ -794,26 +794,38 @@ window.toggleDone =
 
         renderApp();
     };
+
 // RESET ALL PROGRESS
-window.resetProgress = function() {
-    const confirmed = confirm(
+window.resetProgress = function () {
+    const confirmed = window.confirm(
         "Reset all progress?\n\n" +
-        "This will erase all watched lectures and completed sessions.\n" +
-        "Your syllabus, schedule, and lecture links will NOT be changed."
+        "This will erase your watched lectures, attendance, " +
+        "and completed sessions.\n\n" +
+        "Your syllabus and schedule will NOT be changed."
     );
 
     if (!confirmed) return;
 
-    progressState = {};
-    watchedState = {};
+    // Clear every progress-related storage used by the app
+    localStorage.removeItem("ppe_progress_state");
+    localStorage.removeItem("ppe_attendance_state");
+    localStorage.removeItem("ppe_watched_state");
 
-    localStorage.removeItem('ppe_progress_state');
-    localStorage.removeItem('ppe_watched_state');
+    // Clear in-memory variables only if they exist
+    if (typeof progressState !== "undefined") {
+        progressState = {};
+    }
 
-    renderApp();
-    renderOverview();
+    if (typeof attendanceState !== "undefined") {
+        attendanceState = {};
+    }
 
-    alert("Progress has been reset.");
+    if (typeof watchedState !== "undefined") {
+        watchedState = {};
+    }
+
+    // Reload the app so every counter/card is rebuilt from zero
+    window.location.reload();
 };
 // =====================================================
 // LOAD SYLLABUS
