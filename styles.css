@@ -1,161 +1,569 @@
-/* =====================================================
-   PPE — HTML COMPATIBILITY / MOBILE FIX
-   ===================================================== */
+/* =========================================================
+   PPE — PERSONAL UNIVERSITY PORTAL
+   COMPLETE STYLESHEET
+   ========================================================= */
 
-/* HEADER LOGO */
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+
+:root {
+    --bg: #080d0b;
+    --bg-soft: #0d1411;
+    --card-bg: #111916;
+    --card-bg-hover: #151f1b;
+
+    --primary-green: #10b981;
+    --primary-green-light: rgba(16, 185, 129, 0.12);
+    --primary-green-soft: rgba(16, 185, 129, 0.08);
+
+    --text-primary: #f3f7f5;
+    --text-secondary: #a7b3ae;
+    --text-muted: #71807a;
+
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-light: rgba(255, 255, 255, 0.05);
+
+    --amber-tag: #f59e0b;
+    --amber-soft: rgba(245, 158, 11, 0.12);
+
+    --red: #ef4444;
+    --red-soft: rgba(239, 68, 68, 0.12);
+
+    --blue: #60a5fa;
+    --blue-soft: rgba(96, 165, 250, 0.12);
+
+    --shadow-soft:
+        0 8px 30px rgba(0, 0, 0, 0.22);
+
+    --shadow-card:
+        0 10px 35px rgba(0, 0, 0, 0.20);
+
+    --radius-card: 20px;
+}
+
+
+/* =========================================================
+   2. GLOBAL RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg);
+    color-scheme: dark;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(16, 185, 129, 0.055),
+            transparent 32%
+        ),
+        var(--bg);
+
+    color: var(--text-primary);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size: 16px;
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    color: inherit;
+}
+
+img,
+svg {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   3. MAIN APP FRAME
+   ========================================================= */
+
+.mobile-frame {
+    width: 100%;
+    max-width: 760px;
+
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding:
+        28px
+        24px
+        120px;
+
+    position: relative;
+}
+
+
+/* =========================================================
+   4. HEADER
+   ========================================================= */
+
+.app-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+.user-meta {
+    min-width: 0;
+}
+
+.sub-date {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    letter-spacing: 0.02em;
+}
+
+.greeting {
+    margin: 0;
+
+    color: var(--text-primary);
+
+    font-size: 1.8rem;
+    line-height: 1.15;
+
+    font-weight: 750;
+
+    letter-spacing: -0.035em;
+}
+
+.avatar-badge,
 .ppe-logo {
     width: 54px;
     height: 54px;
+
+    flex: 0 0 54px;
+
     border-radius: 50%;
+
     background: var(--primary-green);
-    color: #fff;
+
+    color: #ffffff;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 800;
 
-    box-shadow: 0 4px 12px rgba(15, 169, 116, 0.25);
-    flex-shrink: 0;
+    letter-spacing: 0.02em;
+
+    box-shadow:
+        0 4px 16px rgba(16, 185, 129, 0.22);
 }
 
 
-/* =====================================================
-   PROGRESS CARD
-   ===================================================== */
+/* =========================================================
+   5. MAIN CONTENT / TABS
+   ========================================================= */
 
-.progress-card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 18px 20px;
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 24px;
-}
-
-.progress-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.progress-header strong {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-#completionRateBadge {
-    background: var(--primary-green-light);
-    color: var(--primary-green);
-    font-size: 1.1rem;
-    font-weight: 700;
-    padding: 8px 14px;
-    border-radius: 14px;
-}
-
-.progress-card .progress-bar {
+.main-content {
     width: 100%;
-    height: 8px;
-    background: #EEF2F6;
-    border-radius: 99px;
-    overflow: hidden;
-    margin-top: 10px;
+}
+
+.tab-content {
+    display: none;
+
+    width: 100%;
+
+    animation:
+        tabFade 0.18s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes tabFade {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
-/* =====================================================
-   METRICS
-   ===================================================== */
+/* =========================================================
+   6. SECTION HEADINGS
+   ========================================================= */
 
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 24px;
-}
-
-.metric-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 14px 10px;
-    text-align: center;
-    box-shadow: var(--shadow-soft);
+.section-row,
+.section-heading,
+.week-filter-row {
+    width: 100%;
 
     display: flex;
-    flex-direction: column;
     align-items: center;
-}
-
-.metric-card strong {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--primary-green);
-}
-
-.metric-card span {
-    font-size: 0.72rem;
-    color: var(--text-secondary);
-    margin-top: 4px;
-}
-
-
-/* =====================================================
-   CURRICULUM HEADER
-   ===================================================== */
-
-.section-heading {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
+
+    gap: 14px;
+
     margin-bottom: 14px;
 }
 
-.section-heading h3 {
+.section-row h3,
+.section-heading h3,
+.week-filter-row h3 {
     margin: 0;
-    font-size: 1.05rem;
+
+    color: var(--text-primary);
+
+    font-size: 1rem;
+    line-height: 1.3;
+
     font-weight: 700;
+
+    letter-spacing: -0.01em;
+}
+
+.week-filter-row {
+    margin-top: 26px;
+}
+
+
+/* =========================================================
+   7. HERO PROGRESS CARD
+   ========================================================= */
+
+.hero-metric-card,
+.progress-card {
+    width: 100%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 185, 129, 0.095),
+            rgba(17, 25, 22, 0.98) 55%
+        );
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-card);
+
+    padding: 20px;
+
+    box-shadow: var(--shadow-card);
+
+    margin-bottom: 22px;
+}
+
+.hero-metric-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.hero-left {
+    min-width: 0;
+    flex: 1;
+}
+
+.metric-title {
+    display: block;
+
+    color: var(--text-secondary);
+
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    margin-bottom: 12px;
+}
+
+.progress-bar-wrap {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    border-radius: 999px;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+
+    background: var(--primary-green);
+
+    border-radius: inherit;
+
+    transition:
+        width 0.35s ease;
+}
+
+.hero-badge,
+#completionRateBadge {
+    flex: 0 0 auto;
+
+    min-width: 62px;
+
+    padding: 9px 13px;
+
+    border-radius: 14px;
+
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+
+    text-align: center;
+
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   8. SEMESTER METRICS
+   ========================================================= */
+
+.stats-row,
+.metrics-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+.stat-pill,
+.metric-card {
+    min-width: 0;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-light);
+
+    border-radius: 16px;
+
+    padding: 15px 10px;
+
+    text-align: center;
+
+    box-shadow: var(--shadow-soft);
+}
+
+.stat-val,
+.metric-card strong {
+    display: block;
+
+    color: var(--primary-green);
+
+    font-size: 1.25rem;
+    line-height: 1.1;
+
+    font-weight: 800;
+}
+
+.stat-lbl,
+.metric-card span {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--text-muted);
+
+    font-size: 0.69rem;
+    line-height: 1.25;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   9. WEEK SELECTOR
+   ========================================================= */
+
+.select-pill-wrapper {
+    flex: 0 0 auto;
+
+    position: relative;
 }
 
 #weekSelector {
     appearance: none;
     -webkit-appearance: none;
 
+    min-width: 112px;
+
+    padding:
+        8px
+        32px
+        8px
+        13px;
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius: 999px;
+
     background-color: var(--card-bg);
-
-    border: 1px solid var(--border-color);
-
-    padding: 7px 32px 7px 14px;
-
-    border-radius: 99px;
-
-    font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
 
     color: var(--text-primary);
 
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 650;
+
     cursor: pointer;
 
-    box-shadow: var(--shadow-soft);
+    outline: none;
 
     background-image:
-        url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2399a59f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 
     background-repeat: no-repeat;
     background-position: right 10px center;
-    background-size: 14px;
+    background-size: 13px;
+}
+
+#weekSelector:focus {
+    border-color: rgba(16, 185, 129, 0.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(16, 185, 129, 0.10);
 }
 
 
-/* =====================================================
-   COURSE LIST
-   ===================================================== */
+/* =========================================================
+   10. GENERAL CARDS
+   ========================================================= */
 
+.clean-card {
+    width: 100%;
+
+    padding: 20px;
+
+    background: var(--card-bg);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius: var(--radius-card);
+
+    box-shadow: var(--shadow-soft);
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
+
+    overflow: hidden;
+}
+
+.clean-card + .clean-card {
+    margin-top: 14px;
+}
+
+.clean-card:hover {
+    background: var(--card-bg-hover);
+
+    border-color:
+        rgba(255, 255, 255, 0.11);
+}
+
+.clean-card h4 {
+    margin: 10px 0 7px;
+
+    color: var(--text-primary);
+
+    font-size: 1.05rem;
+    line-height: 1.35;
+
+    font-weight: 720;
+
+    letter-spacing: -0.015em;
+}
+
+.clean-card p {
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   11. COURSE GRID
+   ========================================================= */
+
+.cards-grid,
 #courseList {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
+
     gap: 14px;
 }
 
@@ -164,124 +572,496 @@
 }
 
 
-/* =====================================================
-   PROFILE
-   ===================================================== */
+/* =========================================================
+   12. CARD HEADERS
+   ========================================================= */
 
-.profile-card {
+.card-head {
+    width: 100%;
+
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   13. BADGES
+   ========================================================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    max-width: 100%;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 0.67rem;
+    line-height: 1.1;
+
+    font-weight: 750;
+
+    letter-spacing: 0.025em;
+
+    white-space: nowrap;
+}
+
+.badge-sub {
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+}
+
+.badge-status {
+    background: rgba(255, 255, 255, 0.055);
+
+    color: var(--text-secondary);
+}
+
+.badge-status.complete {
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+}
+
+.badge-status.active {
+    background: var(--amber-soft);
+
+    color: var(--amber-tag);
+}
+
+
+/* =========================================================
+   14. TASK CARDS
+   ========================================================= */
+
+.task-meta-line {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-top: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.79rem;
+    line-height: 1.45;
+}
+
+.task-meta-line .label {
+    flex: 0 0 58px;
+
+    color: var(--text-muted);
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.035em;
+}
+
+.task-meta-line > span:not(.label),
+.task-meta-line > div {
+    min-width: 0;
+    flex: 1;
+}
+
+.task-meta-line a {
+    color: var(--primary-green);
+
+    text-decoration: none;
+
+    overflow-wrap: anywhere;
+
+    line-height: 1.4;
+}
+
+.task-meta-line a:hover {
+    text-decoration: underline;
+}
+
+.done-task {
+    border-color:
+        rgba(16, 185, 129, 0.18);
+}
+
+.done-task h4 {
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   15. TASK BUTTONS
+   ========================================================= */
+
+.task-btn {
+    width: 100%;
+
+    min-height: 44px;
+
+    margin-top: 16px;
+
+    padding: 10px 16px;
+
+    border: 1px solid
+        rgba(16, 185, 129, 0.22);
+
+    border-radius: 13px;
+
+    background: var(--primary-green);
+
+    color: #03140e;
+
+    font-family: inherit;
+
+    font-size: 0.82rem;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        opacity 0.15s ease;
+
+    box-shadow:
+        0 5px 16px
+        rgba(16, 185, 129, 0.12);
+}
+
+.task-btn:hover:not(:disabled) {
+    background: #20c992;
+
+    transform: translateY(-1px);
+}
+
+.task-btn:active:not(:disabled) {
+    transform: scale(0.985);
+}
+
+.task-btn:disabled {
+    background: rgba(255, 255, 255, 0.055);
+
+    border-color: var(--border-color);
+
+    color: var(--text-muted);
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+
+    opacity: 0.9;
+}
+
+.task-btn.btn-undo {
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+
+    border-color:
+        rgba(16, 185, 129, 0.16);
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   16. LECTURE / PLAYLIST TAB
+   ========================================================= */
+
+.playlist-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+.hub-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.hub-card h4 {
+    margin-top: 13px;
+}
+
+.hub-card p {
+    flex: 1;
+
+    margin-bottom: 18px;
+}
+
+.prof-tag {
+    min-width: 0;
+
+    color: var(--text-muted);
+
+    font-size: 0.68rem;
+    font-weight: 600;
+
+    text-align: right;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 9px 13px;
+
+    border:
+        1px solid
+        rgba(16, 185, 129, 0.18);
+
+    border-radius: 12px;
+
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+
+    text-decoration: none;
+
+    font-size: 0.78rem;
+    font-weight: 750;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.action-btn:hover {
+    background:
+        rgba(16, 185, 129, 0.18);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   17. PROFILE / DOSSIER
+   ========================================================= */
+
+.profile-summary-card {
+    display: flex;
+    align-items: center;
+
     gap: 16px;
 }
 
-.profile-avatar {
-    width: 60px;
-    height: 60px;
+.avatar-large {
+    width: 62px;
+    height: 62px;
+
+    flex: 0 0 62px;
 
     border-radius: 50%;
-
-    background: var(--primary-green);
-    color: white;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-size: 1.2rem;
+    background:
+        linear-gradient(
+            145deg,
+            var(--primary-green),
+            #087f59
+        );
+
+    color: white;
+
+    font-size: 1.05rem;
+    font-weight: 800;
+
+    box-shadow:
+        0 6px 20px
+        rgba(16, 185, 129, 0.16);
+}
+
+.profile-details {
+    min-width: 0;
+}
+
+.profile-details h4 {
+    margin: 0 0 6px;
+
+    font-size: 1.05rem;
+}
+
+.program-tag {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: var(--primary-green-light);
+
+    color: var(--primary-green);
+
+    font-size: 0.67rem;
     font-weight: 700;
+}
 
-    flex-shrink: 0;
+.institution {
+    margin-top: 7px !important;
+
+    color: var(--text-muted) !important;
+
+    font-size: 0.73rem !important;
 }
 
 
-/* =====================================================
-   MILESTONES
-   ===================================================== */
+/* =========================================================
+   18. TIMELINE / MILESTONES
+   ========================================================= */
 
-.milestones {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.milestone {
+.timeline-item {
     position: relative;
 
     display: flex;
-    gap: 12px;
+
+    gap: 14px;
 
     padding-bottom: 22px;
 }
 
-.milestone:last-child {
+.timeline-item:last-child {
     padding-bottom: 0;
 }
 
-.milestone::before {
+.timeline-marker {
+    position: relative;
+
+    width: 13px;
+    height: 13px;
+
+    flex: 0 0 13px;
+
+    margin-top: 4px;
+
+    border-radius: 50%;
+
+    background: #37423d;
+
+    border:
+        2px solid
+        #4b5953;
+
+    z-index: 2;
+}
+
+.timeline-marker.complete {
+    background: var(--primary-green);
+
+    border-color: var(--primary-green);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(16, 185, 129, 0.09);
+}
+
+.timeline-marker.active {
+    background: var(--amber-tag);
+
+    border-color: var(--amber-tag);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(245, 158, 11, 0.08);
+}
+
+.timeline-item:not(:last-child)
+.timeline-marker::after {
     content: "";
 
     position: absolute;
 
-    left: 6px;
-    top: 14px;
-    bottom: 0;
+    left: 4px;
+    top: 11px;
 
-    width: 2px;
+    width: 1px;
+    height: calc(100% + 22px);
 
     background: var(--border-color);
+
+    z-index: -1;
 }
 
-.milestone:last-child::before {
-    display: none;
+.timeline-body {
+    min-width: 0;
 }
 
-.milestone-dot {
-    width: 14px;
-    height: 14px;
+.timeline-body h5 {
+    margin: 0;
 
-    border-radius: 50%;
+    color: var(--text-primary);
 
-    background: #D1D5DB;
-
-    flex-shrink: 0;
-
-    margin-top: 4px;
-
-    position: relative;
-    z-index: 2;
-}
-
-.milestone-dot.active {
-    background: var(--amber-tag);
-}
-
-.milestone strong {
-    display: block;
-
-    font-size: 0.9rem;
+    font-size: 0.87rem;
     line-height: 1.35;
+
+    font-weight: 700;
 }
 
-.milestone p {
-    margin: 4px 0 0;
-
-    font-size: 0.78rem;
-    line-height: 1.4;
+.timeline-body p {
+    margin: 5px 0 0;
 
     color: var(--text-secondary);
+
+    font-size: 0.77rem;
+    line-height: 1.5;
 }
 
 
-/* =====================================================
-   RESET BUTTON
-   ===================================================== */
+/* =========================================================
+   19. PROGRESS CONTROLS
+   ========================================================= */
+
+.progress-controls-card {
+    margin-top: 24px;
+}
+
+.progress-controls-card p {
+    color: var(--text-muted) !important;
+
+    font-size: 0.82rem !important;
+
+    line-height: 1.5;
+}
 
 .reset-progress-btn {
     width: 100%;
 
+    min-height: 44px;
+
     margin-top: 14px;
 
-    padding: 12px 18px;
+    padding: 10px 16px;
 
     display: flex;
     align-items: center;
@@ -289,50 +1069,275 @@
 
     gap: 9px;
 
-    border: 1px solid var(--border-color);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
 
-    border-radius: 14px;
+    border-radius: 13px;
 
-    background: var(--primary-green-light);
+    background:
+        rgba(255, 255, 255, 0.045);
 
-    color: var(--primary-green);
+    color: var(--text-secondary);
 
     font-family: inherit;
 
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.82rem;
+    font-weight: 650;
 
     cursor: pointer;
 
     transition:
         transform 0.15s ease,
-        background 0.15s ease;
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.reset-progress-btn span:first-child {
+    font-size: 1.1rem;
+
+    line-height: 1;
 }
 
 .reset-progress-btn:hover {
-    background: #DDF3EA;
+    background:
+        rgba(255, 255, 255, 0.075);
+
+    color: var(--text-primary);
+
     transform: translateY(-1px);
 }
 
 .reset-progress-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.985);
 }
 
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
+/* =========================================================
+   20. SYLLABUS OVERVIEW
+   ========================================================= */
+
+.overview-week-group {
+    width: 100%;
+
+    margin-bottom: 12px;
+
+    overflow: hidden;
+
+    background: var(--card-bg);
+
+    border:
+        1px solid
+        var(--border-color);
+
+    border-radius: 17px;
+}
+
+.week-toggle {
+    width: 100%;
+
+    padding: 15px 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    cursor: pointer;
+
+    color: var(--text-primary);
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    background:
+        rgba(255, 255, 255, 0.018);
+
+    transition:
+        background 0.15s ease;
+}
+
+.week-toggle:hover {
+    background:
+        rgba(16, 185, 129, 0.06);
+}
+
+.week-content {
+    display: none;
+
+    padding: 0 14px 16px;
+}
+
+.week-content.open {
+    display: block;
+}
+
+.overview-week-group .clean-card {
+    margin-top: 12px;
+}
+
+
+/* =========================================================
+   21. BOTTOM NAVIGATION
+   ========================================================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 14px;
+
+    transform: translateX(-50%);
+
+    z-index: 1000;
+
+    width: min(
+        calc(100% - 32px),
+        620px
+    );
+
+    height: 70px;
+
+    padding: 6px;
+
+    display: flex;
+    align-items: stretch;
+
+    gap: 4px;
+
+    background:
+        rgba(17, 25, 22, 0.94);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 12px 45px
+        rgba(0, 0, 0, 0.42);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.nav-item {
+    flex: 1;
+
+    min-width: 0;
+
+    border: 0;
+
+    border-radius: 19px;
+
+    background: transparent;
+
+    color: var(--text-muted);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    padding: 7px 5px;
+
+    cursor: pointer;
+
+    font-size: 0.68rem;
+    font-weight: 650;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+
+    flex: 0 0 auto;
+}
+
+.nav-item span {
+    line-height: 1.1;
+}
+
+.nav-item:hover {
+    color: var(--text-primary);
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+.nav-item.active {
+    color: var(--primary-green);
+
+    background:
+        var(--primary-green-light);
+}
+
+.nav-item:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================================================
+   22. SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #26332e;
+
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #34453e;
+}
+
+
+/* =========================================================
+   23. SELECTION
+   ========================================================= */
+
+::selection {
+    background:
+        rgba(16, 185, 129, 0.28);
+
+    color: white;
+}
+
+
+/* =========================================================
+   24. MOBILE — PHONES
+   ========================================================= */
 
 @media (max-width: 600px) {
 
+    body {
+        font-size: 15px;
+    }
+
     .mobile-frame {
         width: 100%;
-        max-width: 440px;
+        max-width: none;
 
         padding:
             18px
-            16px
-            110px;
+            14px
+            112px;
     }
 
     .app-header {
@@ -340,114 +1345,366 @@
     }
 
     .greeting {
-        font-size: 1.65rem;
+        font-size: 1.55rem;
+        line-height: 1.15;
     }
 
+    .sub-date {
+        font-size: 0.72rem;
+    }
+
+    .avatar-badge,
     .ppe-logo {
-        width: 52px;
-        height: 52px;
+        width: 48px;
+        height: 48px;
+
+        flex-basis: 48px;
+
+        font-size: 0.7rem;
     }
 
+    .hero-metric-card {
+        padding: 16px;
+
+        gap: 12px;
+
+        border-radius: 18px;
+    }
+
+    .metric-title {
+        font-size: 0.76rem;
+
+        margin-bottom: 9px;
+    }
+
+    .hero-badge,
+    #completionRateBadge {
+        min-width: 52px;
+
+        padding: 8px 10px;
+
+        font-size: 0.92rem;
+    }
+
+    .section-row,
+    .week-filter-row {
+        margin-bottom: 11px;
+    }
+
+    .section-row h3,
+    .week-filter-row h3 {
+        font-size: 0.92rem;
+    }
+
+    .stats-row,
     .metrics-grid {
-        gap: 8px;
+        gap: 7px;
+
+        margin-bottom: 19px;
     }
 
+    .stat-pill,
     .metric-card {
-        padding: 13px 6px;
+        padding: 12px 6px;
+
+        border-radius: 14px;
     }
 
-    .metric-card strong {
-        font-size: 1.15rem;
-    }
-
-    .metric-card span {
-        font-size: 0.68rem;
-    }
-
-    .section-heading {
-        gap: 10px;
-    }
-
-    #weekSelector {
-        max-width: 110px;
-    }
-
-    .clean-card {
-        padding: 17px;
-        border-radius: 19px;
-    }
-
-    .task-meta-line {
-        font-size: 0.82rem;
-    }
-
-    .task-meta-line span.label {
-        width: 55px;
-        flex-shrink: 0;
-    }
-
-    .task-meta-line a {
-        overflow-wrap: anywhere;
-    }
-
-    .task-btn {
-        min-height: 46px;
-    }
-
-    .bottom-nav {
-        width: calc(100% - 28px);
-        max-width: 400px;
-
-        bottom: 10px;
-
-        height: 66px;
-        border-radius: 32px;
-    }
-
-    .nav-item {
-        flex: 1;
-        padding: 8px 4px;
-    }
-
-    .profile-card {
-        gap: 13px;
-    }
-
-    .profile-avatar {
-        width: 54px;
-        height: 54px;
-    }
-
-    .progress-controls-card {
-        margin-bottom: 20px;
-    }
-}
-
-
-/* =====================================================
-   SMALL PHONES
-   ===================================================== */
-
-@media (max-width: 380px) {
-
-    .mobile-frame {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .greeting {
-        font-size: 1.5rem;
-    }
-
-    .metrics-grid {
-        gap: 6px;
-    }
-
+    .stat-val,
     .metric-card strong {
         font-size: 1.05rem;
     }
 
+    .stat-lbl,
+    .metric-card span {
+        font-size: 0.62rem;
+
+        margin-top: 4px;
+    }
+
+    .week-filter-row {
+        gap: 8px;
+
+        align-items: center;
+    }
+
+    #weekSelector {
+        min-width: 100px;
+
+        padding:
+            7px
+            29px
+            7px
+            11px;
+
+        font-size: 0.72rem;
+    }
+
+    .cards-grid,
+    #courseList {
+        gap: 10px;
+    }
+
     .clean-card {
-        padding: 15px;
+        padding: 16px;
+
+        border-radius: 17px;
+    }
+
+    .clean-card h4 {
+        margin-top: 9px;
+
+        font-size: 0.98rem;
+
+        line-height: 1.3;
+    }
+
+    .clean-card p {
+        font-size: 0.78rem;
+    }
+
+    .card-head {
+        gap: 7px;
+    }
+
+    .badge {
+        padding: 4px 7px;
+
+        font-size: 0.61rem;
+    }
+
+    .task-meta-line {
+        gap: 8px;
+
+        margin-top: 7px;
+
+        font-size: 0.74rem;
+
+        line-height: 1.4;
+    }
+
+    .task-meta-line .label {
+        flex-basis: 51px;
+
+        font-size: 0.62rem;
+    }
+
+    .task-meta-line a {
+        font-size: 0.76rem;
+    }
+
+    .task-btn {
+        min-height: 42px;
+
+        margin-top: 13px;
+
+        padding: 9px 13px;
+
+        border-radius: 12px;
+
+        font-size: 0.75rem;
+    }
+
+    .playlist-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .hub-card p {
+        margin-bottom: 14px;
+    }
+
+    .action-btn {
+        min-height: 40px;
+
+        font-size: 0.74rem;
+    }
+
+    .profile-summary-card {
+        gap: 12px;
+    }
+
+    .avatar-large {
+        width: 52px;
+        height: 52px;
+
+        flex-basis: 52px;
+
+        font-size: 0.9rem;
+    }
+
+    .profile-details h4 {
+        font-size: 0.92rem;
+    }
+
+    .program-tag {
+        font-size: 0.61rem;
+    }
+
+    .institution {
+        font-size: 0.68rem !important;
+    }
+
+    .timeline-item {
+        gap: 11px;
+
+        padding-bottom: 18px;
+    }
+
+    .timeline-body h5 {
+        font-size: 0.8rem;
+    }
+
+    .timeline-body p {
+        font-size: 0.7rem;
+    }
+
+    .progress-controls-card {
+        margin-top: 18px !important;
+
+        margin-bottom: 20px;
+    }
+
+    .reset-progress-btn {
+        min-height: 42px;
+
+        padding: 9px 14px;
+
+        font-size: 0.76rem;
+    }
+
+    .bottom-nav {
+        left: 12px;
+        right: 12px;
+
+        bottom: 9px;
+
+        transform: none;
+
+        width: auto;
+        max-width: none;
+
+        height: 64px;
+
+        border-radius: 23px;
+    }
+
+    .nav-item {
+        padding: 7px 3px;
+
+        border-radius: 17px;
+
+        font-size: 0.63rem;
+    }
+
+    .nav-item svg {
+        width: 19px;
+        height: 19px;
+    }
+}
+
+
+/* =========================================================
+   25. VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .mobile-frame {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .greeting {
+        font-size: 1.42rem;
+    }
+
+    .avatar-badge,
+    .ppe-logo {
+        width: 44px;
+        height: 44px;
+
+        flex-basis: 44px;
+    }
+
+    .hero-metric-card {
+        padding: 14px;
+    }
+
+    .stats-row,
+    .metrics-grid {
+        gap: 5px;
+    }
+
+    .stat-pill,
+    .metric-card {
+        padding:
+            11px
+            4px;
+    }
+
+    .stat-val,
+    .metric-card strong {
+        font-size: 0.98rem;
+    }
+
+    .stat-lbl,
+    .metric-card span {
+        font-size: 0.58rem;
+    }
+
+    .clean-card {
+        padding: 14px;
+
+        border-radius: 16px;
+    }
+
+    .clean-card h4 {
+        font-size: 0.92rem;
+    }
+
+    .task-meta-line {
+        font-size: 0.7rem;
+    }
+
+    .task-meta-line .label {
+        flex-basis: 47px;
+
+        font-size: 0.58rem;
+    }
+
+    .task-btn {
+        min-height: 40px;
+
+        font-size: 0.71rem;
+    }
+
+    .nav-item {
+        font-size: 0.58rem;
+    }
+
+    .nav-item svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+
+/* =========================================================
+   26. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
     }
 }
