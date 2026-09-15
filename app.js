@@ -1340,14 +1340,15 @@ currentWeekItems.forEach(
 
         else if (isLocked) {
 
-            badgeLabel =
-                "Upcoming";
+    badgeLabel = "Upcoming";
 
-            buttonText =
-                `Available on ${session.date}`;
+    buttonText =
+        scheduledDateTime
+            ? `Available on ${formatDate(scheduledDateTime)}`
+            : "Available soon";
 
-            buttonDisabled =
-                true;
+    buttonDisabled = true;
+}
         }
 
         else if (isReview) {
