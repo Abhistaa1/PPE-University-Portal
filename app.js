@@ -248,22 +248,34 @@ return date.toLocaleDateString(
 
 }
 
-function updateCurrentDateDisplay() {
-    const dateEl = document.getElementById("currentDateDisplay");
+f// =====================================================
+// LIVE HEADER DATE
+// =====================================================
 
-    if (!dateEl) {
+function updateCurrentDateDisplay() {
+
+    const dateElement =
+        document.getElementById(
+            "currentDateDisplay"
+        );
+
+    if (!dateElement) {
         return;
     }
 
-    const today = new Date();
+    const today =
+        new Date();
 
-    dateEl.textContent = today.toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long"
-    });
+    dateElement.textContent =
+        today.toLocaleDateString(
+            "en-GB",
+            {
+                weekday: "long",
+                day: "2-digit",
+                month: "long"
+            }
+        );
 }
-
 
 function parseTime(timeString) {
 
