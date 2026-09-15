@@ -797,21 +797,22 @@ window.toggleDone =
 
 
 // =====================================================
-// RESET PROGRESS
+// RESET ALL PROGRESS
 // =====================================================
 
 window.resetProgress = function () {
+
     const confirmed = window.confirm(
         "Reset all progress?\n\n" +
         "This will erase watched lectures and completed sessions.\n\n" +
-        "Your syllabus and schedule will NOT be changed."
+        "Your syllabus, schedule, and lecture links will NOT be changed."
     );
 
     if (!confirmed) {
         return;
     }
 
-    // Clear every progress store used by the app
+    // Clear progress data
     localStorage.removeItem("ppe_progress_state");
     localStorage.removeItem("ppe_watched_state");
     localStorage.removeItem("ppe_completed_sessions");
@@ -822,31 +823,13 @@ window.resetProgress = function () {
     watchedState = {};
     completedSessions = {};
 
-    // Rebuild the page
+    // Rebuild the app
     renderApp();
     renderOverview();
 
-    // Return to Dossier
-    window.switchTab("profileTab");
-
-    window.alert("Progress has been reset.");
+    alert("Progress has been reset.");
 };
 
-
-// =====================================================
-// DOSSIER RESET CONTROL
-// =====================================================
-
-// Automatically creates the Reset Progress card
-// inside the Dossier tab.
-function renderResetControl() {
-
-    const profileTab =
-        document.getElementById("profileTab");
-
-    if (!profileTab) {
-        return;
-    }
 
     // Remove an existing copy first
     const oldCard =
