@@ -340,50 +340,106 @@ weekStart.setDate(
 return weekStart;
 
 }
+function getCourseDate(weekNumber, dayName) {
 
-function getCourseDate(
-weekNumber,
-dayName
-) {
+    if (!semesterStartDate) {
+        return null;
+    }
 
-const weekStart =
-    getWeekStartDate(
-        weekNumber
-    );
+    const startDate =
+        parseDateOnly(semesterStartDate);
 
-if (!weekStart) {
-    return null;
+    if (
+        !startDate ||
+        Number.isNaN(startDate.getTime())
+    ) {
+        return null;
+    }
+
+    /*
+     * Week 1 is anchored to the exact
+     * Start Study date.
+     *
+     * Monday = study day 0
+     * Tuesday = study day 1
+     * Wednesday = study day 2
+     * Thursday = study day 3
+     * Friday = study day 4
+     *
+     * Saturday/Sunday are holidays.
+     */
+
+    const originalDay =
+        getDayNumber(dayName);
+
+    if (originalDay === undefined) {
+        return null;
+    }
+
+    // Saturday and Sunday are holidays.
+    if (
+        originalDay === 0 ||
+        originalDay === 6
+    ) {
+        return null;
+    }
+
+    // Convert original syllabus weekday
+    // into a Monday-Friday study-day index.
+    const dayIndex =
+        originalDay - 1;
+
+    /*
+     * Each academic week contains
+     * five study days.
+     */
+    const totalStudyDayIndex =
+        (Number(weekNumber) - 1) * 5 +
+        dayIndex;
+
+    /*
+     * Move forward from the selected
+     * Start Study date while skipping
+     * Saturday and Sunday.
+     */
+    const result =
+        new Date(startDate);
+
+    let remainingDays =
+        totalStudyDayIndex;
+
+    while (remainingDays > 0) {
+
+        result.setDate(
+            result.getDate() + 1
+        );
+
+        const day =
+            result.getDay();
+
+        if (
+            day !== 0 &&
+            day !== 6
+        ) {
+            remainingDays--;
+        }
+    }
+
+    /*
+     * If Start Study itself is Saturday
+     * or Sunday, move to Monday.
+     */
+    while (
+        result.getDay() === 0 ||
+        result.getDay() === 6
+    ) {
+        result.setDate(
+            result.getDate() + 1
+        );
+    }
+
+    return result;
 }
-
-const targetDay =
-    getDayNumber(dayName);
-
-if (targetDay === undefined) {
-    return null;
-}
-
-const currentDay =
-    weekStart.getDay();
-
-let difference =
-    targetDay - currentDay;
-
-if (difference < 0) {
-    difference += 7;
-}
-
-const result =
-    new Date(weekStart);
-
-result.setDate(
-    weekStart.getDate() +
-    difference
-);
-
-return result;
-
-}
-
 function getScheduledDateTime(session) {
 
 if (!semesterStarted) {
