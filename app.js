@@ -891,7 +891,7 @@ window.resetProgress = function () {
 
     window.scrollTo({
         top: 0,
-        behavior: "instant"
+        behavior: "auto"
     });
 
     // -----------------------------------------
