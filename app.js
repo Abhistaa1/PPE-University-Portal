@@ -2254,7 +2254,7 @@ setInterval(
     60 * 1000
 );
 // =====================================================
-// LECTURE DIRECTORY
+// LECTURE DIRECTORY — PLAYLISTS ONLY
 // =====================================================
 
 function renderPlaylists() {
@@ -2266,35 +2266,48 @@ function renderPlaylists() {
         return;
     }
 
+    const playlists = [
+        {
+            code: "PHIL101",
+            name: "Introduction to Logic",
+            provider: "Zachary Fruhling",
+            url: "https://www.youtube.com/playlist?list=PL2uWqdcaf189i8r_Rh-1dFLmRjKN3EwDI"
+        },
+        {
+            code: "POLS101",
+            name: "Introduction to Philosophical Politics",
+            provider: "Yale Courses",
+            url: "https://www.youtube.com/playlist?list=PL8D95DEA9B7DFE825"
+        },
+        {
+            code: "ECON101",
+            name: "Principles of Microeconomics",
+            provider: "MIT OpenCourseWare",
+            url: "https://www.youtube.com/playlist?list=PLUl4u3cNGP60V7HxLYRaJMbFzP77bzEjb"
+        },
+        {
+            code: "PHIL102",
+            name: "General Philosophy",
+            provider: "Philosophy",
+            url: "https://www.youtube.com/playlist?list=PLg4lEYaHO--SDCgjDUP1nQbn3_Fztv4LK"
+        },
+        {
+            code: "POLS102",
+            name: "Power and Politics in Today's World",
+            provider: "Yale Courses",
+            url: "https://www.youtube.com/playlist?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy"
+        },
+        {
+            code: "MATH101",
+            name: "Mathematics for Economics",
+            provider: "Lazarski Open Courses",
+            url: "https://www.youtube.com/playlist?list=PL9aqlRevPSRDsivOFyJ9b3v1ujCwBLkHs"
+        }
+    ];
+
     playlistList.innerHTML = "";
 
-    const courses =
-        Object.values(courseCatalog || {});
-
-    if (courses.length === 0) {
-
-        playlistList.innerHTML = `
-            <div class="clean-card">
-
-                <h4>
-                    No lecture hubs available
-                </h4>
-
-                <p>
-                    Lecture data has not been loaded yet.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-    courses.forEach(course => {
-
-        if (!course) {
-            return;
-        }
+    playlists.forEach(course => {
 
         const card =
             document.createElement("div");
@@ -2303,63 +2316,47 @@ function renderPlaylists() {
             "clean-card hub-card";
 
         card.innerHTML = `
-
             <div class="card-head">
 
                 <span class="badge badge-sub">
-                    ${course.code || ""}
+                    ${course.code}
                 </span>
 
                 <span class="prof-tag">
-                    ${course.provider || ""}
+                    ${course.provider}
                 </span>
 
             </div>
 
             <h4>
-                ${course.name || ""}
+                ${course.name}
             </h4>
 
-            <p>
-                ${
-                    course.description ||
-                    course.details ||
-                    "Course lecture materials."
-                }
-            </p>
+            <a
+                href="${course.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="youtube-link"
+            >
 
-            ${
-                course.url
-                    ? `
-                        <a
-                            href="${course.url}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="action-btn">
+                <span class="youtube-icon">
+                    ▶
+                </span>
 
-                            Launch Playlist ↗
+                <span>
+                    Watch Playlist
+                </span>
 
-                        </a>
-                      `
-                    : `
-                        <span
-                            style="
-                                color:var(--text-muted);
-                                font-size:0.78rem;
-                            ">
+                <span class="external-icon">
+                    ↗
+                </span>
 
-                            No playlist link available.
-
-                        </span>
-                      `
-            }
-
+            </a>
         `;
 
         playlistList.appendChild(card);
     });
 }
-
 
 // =====================================================
 // LOAD SYLLABUS
