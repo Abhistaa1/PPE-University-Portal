@@ -248,7 +248,7 @@ return date.toLocaleDateString(
 
 }
 
-f// =====================================================
+// =====================================================
 // LIVE HEADER DATE
 // =====================================================
 
@@ -352,6 +352,7 @@ weekStart.setDate(
 return weekStart;
 
 }
+
 function getCourseDate(weekNumber, dayName) {
 
     if (!semesterStartDate) {
@@ -452,6 +453,7 @@ function getCourseDate(weekNumber, dayName) {
 
     return result;
 }
+
 function getScheduledDateTime(session) {
 
 if (!semesterStarted) {
@@ -866,10 +868,12 @@ function (sessionId) {
     }
 
     const isAssessment =
-        session.type === "assessment";
+        session.type ===
+        "assessment";
 
     const isReview =
-        session.type === "review";
+        session.type ===
+        "review";
 
     // Normal lectures require every video
     // to have been watched.
@@ -963,6 +967,7 @@ window.resetProgress = function () {
 
     renderApp();
     renderOverview();
+    updateCurrentDateDisplay();
 
     // -----------------------------------------
     // 6. GO TO MAIN STUDY TAB
@@ -986,102 +991,6 @@ window.resetProgress = function () {
     alert("Semester reset. Welcome back, Scholar.");
 
 };
-
-// =====================================================
-// LOAD SYLLABUS
-// =====================================================
-
-async function loadSyllabus() {
-
-try {
-
-    const response =
-        await fetch(
-            "./data/syllabus.json",
-            {
-                cache: "no-store"
-            }
-        );
-
-    if (!response.ok) {
-
-        throw new Error(
-            `HTTP ${response.status}`
-        );
-    }
-
-    const data =
-        await response.json();
-
-    syllabusData =
-        data.weeks || {};
-
-    courseCatalog =
-        data.courses || {};
-
-    appSettings =
-        data.settings || {};
-
-    if (semesterStarted) {
-
-        const calculatedWeek =
-            calculateCurrentWeek();
-
-        const availableWeeks =
-            Object.keys(
-                syllabusData
-            );
-
-        if (
-            availableWeeks.includes(
-                String(calculatedWeek)
-            )
-        ) {
-
-            currentWeek =
-                String(
-                    calculatedWeek
-                );
-        }
-    }
-
-    populateDropdown();
-
-    renderSemesterStatus();
-
-    renderApp();
-
-    renderOverview();
-
-
-} catch (error) {
-
-    console.error(
-        "Failed to load syllabus:",
-        error
-    );
-
-    if (courseListEl) {
-
-        courseListEl.innerHTML = `
-            <p
-                style="
-                    color:red;
-                    text-align:center;
-                "
-            >
-                Unable to load
-                data/syllabus.json.
-
-                <br><br>
-
-                ${error.message}
-            </p>
-        `;
-    }
-}
-
-}
 
 // =====================================================
 // WEEK DROPDOWN
@@ -1408,14 +1317,16 @@ currentWeekItems.forEach(
 
         else if (isLocked) {
 
-    badgeLabel = "Upcoming";
+            badgeLabel =
+                "Upcoming";
 
-    buttonText =
-        scheduledDateTime
-            ? `Available on ${formatDate(scheduledDateTime)}`
-            : "Available soon";
+            buttonText =
+                scheduledDateTime
+                    ? `Available on ${formatDate(scheduledDateTime)}`
+                    : "Available soon";
 
-    buttonDisabled = true;
+            buttonDisabled =
+                true;
         }
 
         else if (isReview) {
@@ -1700,7 +1611,12 @@ currentWeekItems.forEach(
 
                     ${
                         actualClassDate
-                            ? `${session.day}, ${formatDate(
+                            ? `${actualClassDate.toLocaleDateString(
+                                "en-GB",
+                                {
+                                    weekday: "long"
+                                }
+                            )}, ${formatDate(
                                 actualClassDate
                             )}`
                             : session.day
@@ -2232,6 +2148,9 @@ element
 setInterval(
     () => {
 
+        // Always keep the top date current.
+        updateCurrentDateDisplay();
+
         if (!semesterStarted) {
             return;
         }
@@ -2265,6 +2184,7 @@ setInterval(
     },
     60 * 1000
 );
+
 // =====================================================
 // LECTURE DIRECTORY — PLAYLISTS ONLY
 // =====================================================
@@ -2401,6 +2321,30 @@ async function loadSyllabus() {
         appSettings =
             data.settings || {};
 
+        // Calculate the current week from
+        // the actual Start Study date.
+        if (semesterStarted) {
+
+            const calculatedWeek =
+                calculateCurrentWeek();
+
+            const availableWeeks =
+                Object.keys(
+                    syllabusData
+                );
+
+            if (
+                availableWeeks.includes(
+                    String(calculatedWeek)
+                )
+            ) {
+
+                currentWeek =
+                    String(
+                        calculatedWeek
+                    );
+            }
+        }
 
         // Build the rest of the app
         populateDropdown();
@@ -2412,6 +2356,10 @@ async function loadSyllabus() {
         renderOverview();
 
         renderPlaylists();
+
+        // Keep the header synchronized
+        // with today's actual date.
+        updateCurrentDateDisplay();
 
     }
     catch (error) {
@@ -2446,5 +2394,7 @@ async function loadSyllabus() {
 // =====================================================
 // START
 // =====================================================
+
+updateCurrentDateDisplay();
 
 loadSyllabus();
