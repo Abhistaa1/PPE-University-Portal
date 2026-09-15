@@ -1,4 +1,4 @@
-const CACHE_NAME = "ppe-v7";
+const CACHE_NAME = "ppe-v11";
 
 const APP_SHELL = [
     "./",
