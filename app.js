@@ -219,7 +219,7 @@ window.switchTab = function (tabId) {
     const indexMap = {
         trackerTab: 0,
         playlistTab: 1,
-        overviewTab: 2,
+        syllabusTab: 2,
         profileTab: 3
     };
 
