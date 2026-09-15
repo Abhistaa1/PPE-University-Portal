@@ -2160,3 +2160,73 @@ svg {
         padding: 15px;
     }
 }
+/* =========================================
+   SYLLABUS ACCORDION
+   ========================================= */
+
+.overview-week-group {
+    margin-bottom: 14px;
+}
+
+.week-toggle {
+    width: 100%;
+    min-height: 76px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.055);
+    color: var(--text-primary);
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        border-radius 0.2s ease;
+}
+
+.week-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.week-toggle.open {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: rgba(0, 255, 170, 0.07);
+}
+
+.week-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+
+    padding: 0 20px;
+    opacity: 0;
+
+    transition:
+        grid-template-rows 0.3s ease,
+        opacity 0.25s ease,
+        padding 0.3s ease;
+}
+
+.week-content.expanded {
+    grid-template-rows: 1fr;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    opacity: 1;
+}
+
+.week-content > div {
+    min-height: 0;
+}
