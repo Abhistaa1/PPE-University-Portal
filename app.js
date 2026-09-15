@@ -1348,7 +1348,6 @@ currentWeekItems.forEach(
             : "Available soon";
 
     buttonDisabled = true;
-}
         }
 
         else if (isReview) {
