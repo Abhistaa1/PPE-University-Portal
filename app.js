@@ -2253,10 +2253,110 @@ setInterval(
     },
     60 * 1000
 );
+// =====================================================
+// LECTURE DIRECTORY
+// =====================================================
 
+function renderPlaylists() {
+
+    const playlistList =
+        document.getElementById("playlistList");
+
+    if (!playlistList) {
+        return;
+    }
+
+    playlistList.innerHTML = "";
+
+    const courses =
+        Object.values(courseCatalog);
+
+    if (courses.length === 0) {
+        playlistList.innerHTML = `
+            <div class="clean-card">
+                <h4>No lecture hubs available</h4>
+                <p>
+                    Lecture data has not been loaded yet.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    courses.forEach(course => {
+
+        if (!course) {
+            return;
+        }
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "clean-card hub-card";
+
+        card.innerHTML = `
+
+            <div class="card-head">
+
+                <span class="badge badge-sub">
+                    ${course.code || ""}
+                </span>
+
+                <span class="prof-tag">
+                    ${course.provider || ""}
+                </span>
+
+            </div>
+
+            <h4>
+                ${course.name || ""}
+            </h4>
+
+            <p>
+                ${course.description ||
+                  course.details ||
+                  "Course lecture materials."}
+            </p>
+
+            ${
+                course.url
+                ? `
+                    <a
+                        href="${course.url}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="action-btn">
+
+                        Launch Playlist ↗
+
+                    </a>
+                  `
+                : `
+                    <span
+                        style="
+                            color:var(--text-muted);
+                            font-size:0.78rem;
+                        ">
+
+                        No playlist link available.
+
+                    </span>
+                  `
+            }
+
+        `;
+
+        playlistList.appendChild(card);
+
+    });
+}
 // =====================================================
 // START
 // =====================================================
 
-updateCurrentDateDisplay();
-loadSyllabus();
+populateDropdown();
+renderApp();
+renderOverview();
+renderPlaylists();
