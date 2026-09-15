@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,36 +16,53 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="PPE">
-</head><body>
+</head>
+
+<body>
 
 <div class="mobile-frame">
 
-    <!-- TOP APP BAR -->
+    <!-- ========================================= -->
+    <!-- HEADER -->
+    <!-- ========================================= -->
+
     <header class="app-header">
+
         <div class="user-meta">
-            <span class="sub-date" id="currentDateDisplay">
+
+            <span
+                class="sub-date"
+                id="currentDateDisplay">
                 Monday, 14 September
             </span>
 
             <h2 class="greeting">
                 Welcome, Scholar
             </h2>
+
         </div>
 
         <div class="avatar-badge">
             <span>PPE</span>
         </div>
+
     </header>
 
 
+    <!-- ========================================= -->
     <!-- MAIN CONTENT -->
+    <!-- ========================================= -->
+
     <main class="main-content">
+
 
         <!-- ========================================= -->
         <!-- TAB 1: TRACKER -->
         <!-- ========================================= -->
 
-        <section id="trackerTab" class="tab-content active">
+        <section
+            id="trackerTab"
+            class="tab-content active">
 
             <div class="hero-metric-card">
 
@@ -55,10 +73,12 @@
                     </span>
 
                     <div class="progress-bar-wrap">
+
                         <div
                             class="progress-fill"
                             id="progressFill">
                         </div>
+
                     </div>
 
                 </div>
@@ -72,7 +92,7 @@
             </div>
 
 
-            <!-- STAT SUMMARY ROW -->
+            <!-- SEMESTER METRICS -->
 
             <div class="section-row">
                 <h3>Semester Metrics</h3>
@@ -81,6 +101,7 @@
             <div class="stats-row">
 
                 <div class="stat-pill">
+
                     <span
                         class="stat-val"
                         id="statCompleted">
@@ -90,10 +111,12 @@
                     <span class="stat-lbl">
                         Completed
                     </span>
+
                 </div>
 
 
                 <div class="stat-pill">
+
                     <span
                         class="stat-val"
                         id="statRemaining">
@@ -103,10 +126,12 @@
                     <span class="stat-lbl">
                         Remaining
                     </span>
+
                 </div>
 
 
                 <div class="stat-pill">
+
                     <span
                         class="stat-val"
                         id="statCurrentWeek">
@@ -116,6 +141,7 @@
                     <span class="stat-lbl">
                         Term Phase
                     </span>
+
                 </div>
 
             </div>
@@ -125,7 +151,9 @@
 
             <div class="week-filter-row">
 
-                <h3>Curriculum</h3>
+                <h3>
+                    Curriculum
+                </h3>
 
                 <div class="select-pill-wrapper">
 
@@ -137,7 +165,7 @@
             </div>
 
 
-            <!-- COURSE TASK CARDS -->
+            <!-- COURSE CARDS -->
 
             <div
                 id="courseList"
@@ -149,7 +177,7 @@
 
 
         <!-- ========================================= -->
-        <!-- TAB 2: PLAYLIST DIRECTORY -->
+        <!-- TAB 2: LECTURES -->
         <!-- ========================================= -->
 
         <section
@@ -157,7 +185,11 @@
             class="tab-content">
 
             <div class="section-row">
-                <h3>Primary Lecture Hubs</h3>
+
+                <h3>
+                    Primary Lecture Hubs
+                </h3>
+
             </div>
 
 
@@ -185,8 +217,9 @@
                     </h4>
 
                     <p>
-                        Formal logical structures, syllogisms,
-                        truth tables, and deductive calculus.
+                        Formal logical structures,
+                        syllogisms, truth tables,
+                        and deductive calculus.
                     </p>
 
                     <a
@@ -200,7 +233,6 @@
                     </a>
 
                 </div>
-
 
 
                 <!-- POLS101 -->
@@ -224,8 +256,9 @@
                     </h4>
 
                     <p>
-                        Foundations of the state with Steven B. Smith:
-                        Plato, Hobbes, Locke, and Rousseau.
+                        Foundations of the state with
+                        Steven B. Smith: Plato, Hobbes,
+                        Locke, and Rousseau.
                     </p>
 
                     <a
@@ -239,7 +272,6 @@
                     </a>
 
                 </div>
-
 
 
                 <!-- ECON101 -->
@@ -263,8 +295,8 @@
                     </h4>
 
                     <p>
-                        Prof. Jonathan Gruber’s Fall 2023 sequence
-                        on markets, welfare, and firm behavior.
+                        Introduction to microeconomic
+                        theory and economic decision-making.
                     </p>
 
                     <a
@@ -280,7 +312,6 @@
                 </div>
 
 
-
                 <!-- PHIL102 -->
 
                 <div class="clean-card hub-card">
@@ -292,18 +323,18 @@
                         </span>
 
                         <span class="prof-tag">
-                            Jack Sanders
+                            Philosophy
                         </span>
 
                     </div>
 
                     <h4>
-                        General Philosophy
+                        Introduction to Philosophy
                     </h4>
 
                     <p>
-                        Metaphysics, Cartesian skepticism,
-                        epistemology, and the nature of mind.
+                        Foundations and major questions
+                        in philosophical thought.
                     </p>
 
                     <a
@@ -319,7 +350,6 @@
                 </div>
 
 
-
                 <!-- POLS102 -->
 
                 <div class="clean-card hub-card">
@@ -331,18 +361,18 @@
                         </span>
 
                         <span class="prof-tag">
-                            Yale University
+                            Yale
                         </span>
 
                     </div>
 
                     <h4>
-                        Power and Politics in Today's World
+                        Power and Politics
                     </h4>
 
                     <p>
-                        Prof. Ian Shapiro on regime changes,
-                        institutional stability, and post-Cold War politics.
+                        Power, institutions, political
+                        systems, and contemporary politics.
                     </p>
 
                     <a
@@ -358,7 +388,6 @@
                 </div>
 
 
-
                 <!-- MATH101 -->
 
                 <div class="clean-card hub-card">
@@ -370,7 +399,7 @@
                         </span>
 
                         <span class="prof-tag">
-                            Lazarski Open Course
+                            Mathematics
                         </span>
 
                     </div>
@@ -380,8 +409,8 @@
                     </h4>
 
                     <p>
-                        Matrix operations, unconstrained &
-                        constrained optimization, and partial differentiation.
+                        Mathematical foundations used
+                        throughout economics.
                     </p>
 
                     <a
@@ -396,7 +425,6 @@
 
                 </div>
 
-
             </div>
 
         </section>
@@ -404,15 +432,45 @@
 
 
         <!-- ========================================= -->
-        <!-- TAB 3: MILESTONES & STUDENT -->
+        <!-- TAB 3: SYLLABUS -->
+        <!-- ========================================= -->
+
+        <section
+            id="syllabusTab"
+            class="tab-content">
+
+            <div class="section-row">
+
+                <h3>
+                    Semester Syllabus
+                </h3>
+
+            </div>
+
+            <div id="overviewContent">
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================= -->
+        <!-- TAB 4: DOSSIER -->
         <!-- ========================================= -->
 
         <section
             id="profileTab"
             class="tab-content">
 
+
+            <!-- ACADEMIC STANDING -->
+
             <div class="section-row">
-                <h3>Academic Standing</h3>
+
+                <h3>
+                    Academic Standing
+                </h3>
+
             </div>
 
 
@@ -441,10 +499,9 @@
             </div>
 
 
+            <!-- CORE MILESTONES -->
 
-            <div
-                class="section-row"
-                style="margin-top: 24px;">
+            <div class="section-row">
 
                 <h3>
                     Core Milestones
@@ -452,17 +509,22 @@
 
             </div>
 
+
+            <div class="timeline-list">
+
+
                 <!-- WEEK 1 -->
 
                 <div class="timeline-item">
 
-                    <div class="timeline-marker complete">
+                    <div class="timeline-marker active">
                     </div>
 
                     <div class="timeline-body">
 
                         <h5>
-                            Week 1: Quantitative & Formal Foundation
+                            Week 1:
+                            Quantitative & Formal Foundation
                         </h5>
 
                         <p>
@@ -476,29 +538,29 @@
                 </div>
 
 
-
                 <!-- WEEK 4 -->
 
                 <div class="timeline-item">
 
-                    <div class="timeline-marker active">
+                    <div class="timeline-marker">
                     </div>
 
                     <div class="timeline-body">
 
                         <h5>
-                            Week 4: Modern Realpolitik Transition
+                            Week 4:
+                            Modern Realpolitik Transition
                         </h5>
 
                         <p>
-                            Shift from ancient philosophy to Machiavelli;
-                            firm production costs and calculus limits.
+                            Shift from ancient philosophy
+                            to Machiavelli; firm production
+                            costs and calculus limits.
                         </p>
 
                     </div>
 
                 </div>
-
 
 
                 <!-- WEEK 7-8 -->
@@ -511,18 +573,19 @@
                     <div class="timeline-body">
 
                         <h5>
-                            Week 7–8: Midterm Consolidation
+                            Week 7–8:
+                            Midterm Consolidation
                         </h5>
 
                         <p>
-                            Midterm self-examination; draft analytical essay
-                            on Hobbesian Sovereignty vs. Lockean Property.
+                            Midterm self-examination;
+                            draft analytical essay on Hobbesian
+                            Sovereignty vs. Lockean Property.
                         </p>
 
                     </div>
 
                 </div>
-
 
 
                 <!-- WEEK 12 -->
@@ -535,7 +598,8 @@
                     <div class="timeline-body">
 
                         <h5>
-                            Week 12: Advanced Optimization & Regimes
+                            Week 12:
+                            Advanced Optimization & Regimes
                         </h5>
 
                         <p>
@@ -549,7 +613,6 @@
                 </div>
 
 
-
                 <!-- WEEK 14 -->
 
                 <div class="timeline-item">
@@ -560,7 +623,8 @@
                     <div class="timeline-body">
 
                         <h5>
-                            Week 14: Semester Capstone
+                            Week 14:
+                            Semester Capstone
                         </h5>
 
                         <p>
@@ -572,125 +636,84 @@
 
                 </div>
 
-                <!-- PROGRESS CONTROLS -->
-<div class="clean-card progress-controls-card"
-     style="margin-top:24px; margin-bottom:120px;">
-
-    <div class="card-head">
-        <span class="badge badge-sub">DATA</span>
-
-        <span style="font-size:1.2rem;">
-            ⚙️
-        </span>
-    </div>
-
-    <h4>Progress Controls</h4>
-
-    <p style="
-        color:var(--text-muted);
-        font-size:0.85rem;
-        line-height:1.5;
-    ">
-        Manage your lecture completion and watch history.
-    </p>
-
-    <button
-        type="button"
-        class="reset-progress-btn"
-        onclick="resetProgress()">
-
-        <span>↻</span>
-
-        <span>
-            Reset Progress
-        </span>
-
-    </button>
-
-</div>
-
-        </section>
-
-
-        <!-- ========================================= -->
-        <!-- TAB 4: SEMESTER OVERVIEW -->
-        <!-- ========================================= -->
-
-        <section
-            id="overviewTab"
-            class="tab-content">
-
-            <div class="section-row">
-
-                <h3>
-                    Master Syllabus Overview
-                </h3>
 
             </div>
 
-            <div id="overviewContent">
-                <!-- Javascript will inject the accordions here -->
+
+            <!-- ===================================== -->
+            <!-- RESET PROGRESS -->
+            <!-- ===================================== -->
+
+            <div
+                class="clean-card progress-controls-card"
+                style="
+                    margin-top: 32px;
+                    margin-bottom: 120px;
+                ">
+
+                <div class="card-head">
+
+                    <span class="badge badge-sub">
+                        DATA
+                    </span>
+
+                    <span style="font-size:1.2rem;">
+                        ⚙️
+                    </span>
+
+                </div>
+
+
+                <h4>
+                    Progress Controls
+                </h4>
+
+
+                <p style="
+                    color:var(--text-muted);
+                    font-size:0.85rem;
+                    line-height:1.5;
+                ">
+
+                    Manage your lecture completion
+                    and watch history.
+
+                </p>
+
+
+                <button
+                    type="button"
+                    class="reset-progress-btn"
+                    onclick="resetProgress()">
+
+                    <span>↻</span>
+
+                    <span>
+                        Reset Progress
+                    </span>
+
+                </button>
+
             </div>
 
+
         </section>
+
 
     </main>
 
 
-
     <!-- ========================================= -->
-    <!-- FLOATING DOCK BOTTOM NAVIGATION -->
+    <!-- BOTTOM NAVIGATION -->
     <!-- ========================================= -->
 
     <nav class="bottom-nav">
 
-
-        <!-- TASKS -->
-
         <button
             class="nav-item active"
-            onclick="switchTab('trackerTab')">
+            onclick="switchTab('trackerTab', this)">
 
-            <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                stroke="currentColor"
-                stroke-width="2"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-
-                <rect
-                    x="3"
-                    y="4"
-                    width="18"
-                    height="18"
-                    rx="2">
-                </rect>
-
-                <line
-                    x1="16"
-                    y1="2"
-                    x2="16"
-                    y2="6">
-                </line>
-
-                <line
-                    x1="8"
-                    y1="2"
-                    x2="8"
-                    y2="6">
-                </line>
-
-                <line
-                    x1="3"
-                    y1="10"
-                    x2="21"
-                    y2="10">
-                </line>
-
-            </svg>
+            <span>▣</span>
 
             <span>
                 Tasks
@@ -699,28 +722,11 @@
         </button>
 
 
-
-        <!-- LECTURES -->
-
         <button
             class="nav-item"
-            onclick="switchTab('playlistTab')">
+            onclick="switchTab('playlistTab', this)">
 
-            <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                stroke="currentColor"
-                stroke-width="2"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-
-                <polygon
-                    points="5 3 19 12 5 21 5 3">
-                </polygon>
-
-            </svg>
+            <span>▷</span>
 
             <span>
                 Lectures
@@ -729,66 +735,11 @@
         </button>
 
 
-
-        <!-- SYLLABUS -->
-
         <button
             class="nav-item"
-            onclick="switchTab('overviewTab')">
+            onclick="switchTab('syllabusTab', this)">
 
-            <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                stroke="currentColor"
-                stroke-width="2"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-
-                <line
-                    x1="8"
-                    y1="6"
-                    x2="21"
-                    y2="6">
-                </line>
-
-                <line
-                    x1="8"
-                    y1="12"
-                    x2="21"
-                    y2="12">
-                </line>
-
-                <line
-                    x1="8"
-                    y1="18"
-                    x2="21"
-                    y2="18">
-                </line>
-
-                <line
-                    x1="3"
-                    y1="6"
-                    x2="3.01"
-                    y2="6">
-                </line>
-
-                <line
-                    x1="3"
-                    y1="12"
-                    x2="3.01"
-                    y2="12">
-                </line>
-
-                <line
-                    x1="3"
-                    y1="18"
-                    x2="3.01"
-                    y2="18">
-                </line>
-
-            </svg>
+            <span>☷</span>
 
             <span>
                 Syllabus
@@ -797,34 +748,11 @@
         </button>
 
 
-
-        <!-- DOSSIER -->
-
         <button
             class="nav-item"
-            onclick="switchTab('profileTab')">
+            onclick="switchTab('profileTab', this)">
 
-            <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                stroke="currentColor"
-                stroke-width="2"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round">
-
-                <path
-                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
-                </path>
-
-                <circle
-                    cx="12"
-                    cy="7"
-                    r="4">
-                </circle>
-
-            </svg>
+            <span>♙</span>
 
             <span>
                 Dossier
@@ -832,33 +760,9 @@
 
         </button>
 
-
     </nav>
 
 </div>
-
-
-
-<!-- ========================================= -->
-<!-- APP JAVASCRIPT -->
-<!-- ========================================= -->
-
-<script>
-    // Progress reset control
-    window.resetProgress = function () {
-        const confirmed = window.confirm(
-            "Reset all lecture completion and attendance history?"
-        );
-
-        if (!confirmed) return;
-
-        localStorage.removeItem("ppe_progress_state");
-        localStorage.removeItem("ppe_attendance_state");
-        window.location.reload();
-    };
-</script>
-
-<script src="./app.js"></script>
 
 
 <!-- ========================================= -->
@@ -866,26 +770,34 @@
 <!-- ========================================= -->
 
 <script>
-    if ("serviceWorker" in navigator) {
 
-        window.addEventListener("load", () => {
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener(
+        "load",
+        () => {
 
             navigator.serviceWorker
                 .register("./service-worker.js")
-                .then(() => {
-                    console.log("PWA service worker registered.");
-                })
-                .catch(error => {
-                    console.error(
-                        "PWA service worker registration failed:",
-                        error
-                    );
-                });
+                .catch(
+                    error =>
+                        console.error(
+                            "PWA service worker:",
+                            error
+                        )
+                );
 
-        });
+        }
+    );
 
-    }
+}
+
 </script>
+
+
+<!-- YOUR APP JAVASCRIPT -->
+
+<script src="./app.js"></script>
 
 </body>
 </html>
