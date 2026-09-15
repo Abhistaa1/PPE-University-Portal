@@ -500,39 +500,56 @@ window.startSemester = function () {
 };
 
 // =====================================================
-// RESET SEMESTER
+// RESET ALL PROGRESS + RESET STUDY START
 // =====================================================
 
-window.resetSemester = function () {
+window.resetProgress = function () {
 
-    const confirmed =
-        window.confirm(
-            "Reset semester start date?"
-        );
+    const confirmed = window.confirm(
+        "Reset everything?\n\n" +
+        "This will erase:\n" +
+        "• Watched lectures\n" +
+        "• Completed sessions\n" +
+        "• Attendance history\n" +
+        "• Semester start date\n\n" +
+        "Your syllabus, schedule, and lecture links will NOT be changed."
+    );
 
     if (!confirmed) {
         return;
     }
 
+    // Clear lecture progress
+    localStorage.removeItem("ppe_progress_state");
+    localStorage.removeItem("ppe_watched_state");
+    localStorage.removeItem("ppe_completed_sessions");
+    localStorage.removeItem("ppe_attendance_state");
+
+    // Clear semester / study start
+    localStorage.removeItem("semester_started");
+    localStorage.removeItem("semester_start_date");
+
+    // Reset memory
+    progressState = {};
+    watchedState = {};
+    completedSessions = {};
+
     semesterStarted = false;
     semesterStartDate = null;
     currentWeek = "1";
 
-    localStorage.removeItem(
-        "semester_started"
-    );
-
-    localStorage.removeItem(
-        "semester_start_date"
-    );
-
+    // Reset week selector
     if (weekSelector) {
         weekSelector.value = "1";
     }
 
+    // Re-render everything
     renderSemesterStatus();
     renderApp();
     renderOverview();
+
+    // Reload so the Start Studying UI is restored
+    window.location.reload();
 };
 
 // =====================================================
