@@ -3275,7 +3275,7 @@ function renderOverview() {
 }
 
 
-// =====================================================
+/// =====================================================
 // 27. ACCORDION
 // =====================================================
 
@@ -3283,20 +3283,12 @@ window.toggleAccordion = function (contentId, element) {
     const content = document.getElementById(contentId);
 
     if (!content) {
+        console.error("Accordion content not found:", contentId);
         return;
     }
 
-    const isOpen = content.dataset.open === "true";
-
-    if (isOpen) {
-        content.dataset.open = "false";
-        content.style.display = "none";
-        element.classList.remove("open");
-    } else {
-        content.dataset.open = "true";
-        content.style.display = "block";
-        element.classList.add("open");
-    }
+    content.classList.toggle("expanded");
+    element.classList.toggle("open");
 };
 
 
