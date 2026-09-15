@@ -39,6 +39,9 @@ let syllabusData = {};
 let courseCatalog = {};
 let appSettings = {};
 
+// Maximum planned study time per study day: 2 hours.
+const DAILY_STUDY_LIMIT_SECONDS = 2 * 60 * 60;
+
 // =====================================================
 // SEMESTER STATE
 // =====================================================
@@ -352,7 +355,6 @@ weekStart.setDate(
 return weekStart;
 
 }
-
 function getCourseDate(weekNumber, dayName) {
 
     if (!semesterStartDate) {
@@ -452,6 +454,451 @@ function getCourseDate(weekNumber, dayName) {
     }
 
     return result;
+}
+
+// =====================================================
+// 2-HOUR DAILY STUDY PLANNER
+// =====================================================
+
+function getPlannedSessionDuration(session) {
+
+    if (!session) {
+        return 0;
+    }
+
+    // Use the explicit workload when provided.
+    if (
+        session.sessionDurationSeconds !== undefined &&
+        session.sessionDurationSeconds !== null &&
+        Number(session.sessionDurationSeconds) > 0
+    ) {
+        return Number(session.sessionDurationSeconds);
+    }
+
+    // Otherwise use the total duration of the session's videos.
+    return getSessionVideos(session).reduce(
+        (total, video) =>
+            total +
+            (
+                Number(video.durationSeconds) > 0
+                    ? Number(video.durationSeconds)
+                    : 0
+            ),
+        0
+    );
+}
+
+function nextStudyDay(date) {
+
+    const result = new Date(date);
+
+    do {
+        result.setDate(result.getDate() + 1);
+    } while (
+        result.getDay() === 0 ||
+        result.getDay() === 6
+    );
+
+    result.setHours(0, 0, 0, 0);
+
+    return result;
+}
+
+function normaliseStudyDay(date) {
+
+    const result = new Date(date);
+
+    result.setHours(0, 0, 0, 0);
+
+    while (
+        result.getDay() === 0 ||
+        result.getDay() === 6
+    ) {
+        result.setDate(result.getDate() + 1);
+    }
+
+    return result;
+}
+
+/*
+ * Builds one semester-wide plan.
+ *
+ * Rules:
+ * 1. Keep the syllabus order.
+ * 2. Never schedule a session before its syllabus anchor date.
+ * 3. Keep each session whole; never split a lecture.
+ * 4. Do not put more than 2 hours of normal work on a day.
+ * 5. If adding a session would exceed 2 hours, move the entire
+ *    session to the next weekday.
+ * 6. A single session longer than 2 hours stays whole on its
+ *    own study day, because lectures are never split.
+ */
+function buildStudyPlan() {
+
+    const plan = new Map();
+
+    if (
+        !semesterStarted ||
+        !semesterStartDate
+    ) {
+        return plan;
+    }
+
+    const sessions = [];
+
+    Object.keys(syllabusData)
+        .sort(
+            (a, b) =>
+                Number(a) - Number(b)
+        )
+        .forEach(
+            week => {
+
+                const weekItems =
+                    syllabusData[week] || [];
+
+                weekItems.forEach(
+                    (
+                        session,
+                        index
+                    ) => {
+
+                        const anchorDate =
+                            getCourseDate(
+                                session.week || week,
+                                session.day
+                            );
+
+                        if (!anchorDate) {
+                            return;
+                        }
+
+                        sessions.push({
+                            session,
+                            index,
+                            anchorDate:
+                                normaliseStudyDay(
+                                    anchorDate
+                                )
+                        });
+                    }
+                );
+            }
+        );
+
+    // Preserve syllabus chronology.
+    sessions.sort(
+        (a, b) => {
+
+            const dateDifference =
+                a.anchorDate.getTime() -
+                b.anchorDate.getTime();
+
+            if (dateDifference !== 0) {
+                return dateDifference;
+            }
+
+            return a.index - b.index;
+        }
+    );
+
+    let currentDate = null;
+    let usedSeconds = 0;
+
+    sessions.forEach(
+        item => {
+
+            const duration =
+                getPlannedSessionDuration(
+                    item.session
+                );
+
+            let plannedDate =
+                new Date(
+                    item.anchorDate
+                );
+
+            /*
+             * A session can never move backwards
+             * relative to an earlier scheduled session.
+             */
+            if (
+                currentDate &&
+                plannedDate.getTime() <
+                    currentDate.getTime()
+            ) {
+                plannedDate =
+                    new Date(currentDate);
+            }
+
+            plannedDate =
+                normaliseStudyDay(
+                    plannedDate
+                );
+
+            /*
+             * If this session would exceed the
+             * 2-hour daily budget, roll the entire
+             * session to the next weekday.
+             *
+             * Long single sessions (>2h) are kept whole.
+             */
+            if (
+                usedSeconds > 0 &&
+                duration > 0 &&
+                usedSeconds + duration >
+                    DAILY_STUDY_LIMIT_SECONDS
+            ) {
+
+                plannedDate =
+                    nextStudyDay(
+                        plannedDate
+                    );
+
+                usedSeconds = 0;
+            }
+
+            /*
+             * If the date changed because the syllabus
+             * moved us forward, this is a fresh day.
+             */
+            if (
+                !currentDate ||
+                plannedDate.getTime() !==
+                    currentDate.getTime()
+            ) {
+                usedSeconds = 0;
+            }
+
+            plan.set(
+                item.session.id,
+                {
+                    date:
+                        new Date(
+                            plannedDate
+                        ),
+                    durationSeconds:
+                        duration
+                }
+            );
+
+            usedSeconds += duration;
+
+            currentDate =
+                new Date(
+                    plannedDate
+                );
+        }
+    );
+
+    return plan;
+}
+
+function getPlannedSessionDate(session) {
+
+    const plan =
+        buildStudyPlan();
+
+    const entry =
+        plan.get(
+            session.id
+        );
+
+    return entry
+        ? entry.date
+        : null;
+}
+
+function getDailyStudyLoad(date) {
+
+    if (!date) {
+        return 0;
+    }
+
+    const target =
+        toISODate(
+            normaliseStudyDay(
+                date
+            )
+        );
+
+    const plan =
+        buildStudyPlan();
+
+    let total = 0;
+
+    plan.forEach(
+        entry => {
+
+            if (
+                toISODate(
+                    normaliseStudyDay(
+                        entry.date
+                    )
+                ) === target
+            ) {
+                total +=
+                    entry.durationSeconds;
+            }
+        }
+    );
+
+    return total;
+}
+
+function formatStudyLoad(seconds) {
+
+    const safeSeconds =
+        Math.max(
+            0,
+            Number(seconds) || 0
+        );
+
+    const hours =
+        Math.floor(
+            safeSeconds / 3600
+        );
+
+    const minutes =
+        Math.round(
+            (safeSeconds % 3600) / 60
+        );
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes}m`;
+}
+
+function renderDailyWorkload() {
+
+    const trackerTab =
+        document.getElementById(
+            "trackerTab"
+        );
+
+    if (!trackerTab) {
+        return;
+    }
+
+    let card =
+        document.getElementById(
+            "dailyWorkloadCard"
+        );
+
+    if (!card) {
+
+        card =
+            document.createElement(
+                "div"
+            );
+
+        card.id =
+            "dailyWorkloadCard";
+
+        card.className =
+            "clean-card daily-workload-card";
+
+        const hero =
+            trackerTab.querySelector(
+                ".hero-metric-card, .progress-card"
+            );
+
+        if (hero) {
+            hero.insertAdjacentElement(
+                "afterend",
+                card
+            );
+        } else {
+            trackerTab.prepend(card);
+        }
+    }
+
+    const today =
+        new Date();
+
+    const loadSeconds =
+        getDailyStudyLoad(
+            today
+        );
+
+    const loadLabel =
+        formatStudyLoad(
+            loadSeconds
+        );
+
+    const limitLabel =
+        formatStudyLoad(
+            DAILY_STUDY_LIMIT_SECONDS
+        );
+
+    const percent =
+        DAILY_STUDY_LIMIT_SECONDS > 0
+            ? Math.min(
+                100,
+                Math.round(
+                    (
+                        loadSeconds /
+                        DAILY_STUDY_LIMIT_SECONDS
+                    ) * 100
+                )
+            )
+            : 0;
+
+    card.innerHTML = `
+        <div class="card-head">
+            <span class="badge badge-sub">
+                TODAY
+            </span>
+
+            <span
+                style="
+                    color:var(--primary-green);
+                    font-weight:700;
+                    font-size:0.78rem;
+                "
+            >
+                ${loadLabel} / ${limitLabel}
+            </span>
+        </div>
+
+        <h4>
+            Today's Study Load
+        </h4>
+
+        <div
+            style="
+                width:100%;
+                height:7px;
+                background:rgba(255,255,255,0.07);
+                border-radius:999px;
+                overflow:hidden;
+                margin-top:10px;
+            "
+        >
+            <div
+                style="
+                    width:${percent}%;
+                    height:100%;
+                    background:var(--primary-green);
+                    border-radius:999px;
+                    transition:width 0.3s ease;
+                "
+            ></div>
+        </div>
+
+        <p
+            style="
+                margin-top:9px;
+                color:var(--text-muted);
+                font-size:0.74rem;
+            "
+        >
+            Sessions are kept whole. Anything that would push
+            the day beyond two hours rolls to the next study day.
+        </p>
+    `;
 }
 
 function getScheduledDateTime(session) {
@@ -868,12 +1315,10 @@ function (sessionId) {
     }
 
     const isAssessment =
-        session.type ===
-        "assessment";
+        session.type === "assessment";
 
     const isReview =
-        session.type ===
-        "review";
+        session.type === "review";
 
     // Normal lectures require every video
     // to have been watched.
@@ -967,7 +1412,6 @@ window.resetProgress = function () {
 
     renderApp();
     renderOverview();
-    updateCurrentDateDisplay();
 
     // -----------------------------------------
     // 6. GO TO MAIN STUDY TAB
@@ -991,1304 +1435,6 @@ window.resetProgress = function () {
     alert("Semester reset. Welcome back, Scholar.");
 
 };
-
-// =====================================================
-// WEEK DROPDOWN
-// =====================================================
-
-function populateDropdown() {
-
-if (!weekSelector) {
-    return;
-}
-
-const weeks =
-    Object.keys(
-        syllabusData
-    );
-
-weekSelector.innerHTML = "";
-
-weeks.forEach(
-    week => {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-        option.value =
-            week;
-
-        option.textContent =
-            `Week ${week}`;
-
-        weekSelector.appendChild(
-            option
-        );
-    }
-);
-
-weekSelector.onchange =
-    function (event) {
-
-        currentWeek =
-            event.target.value;
-
-        if (statCurrentWeekEl) {
-
-            statCurrentWeekEl.textContent =
-                `W${currentWeek}`;
-        }
-
-        renderApp();
-        renderOverview();
-    };
-
-if (
-    weeks.includes(
-        currentWeek
-    )
-) {
-
-    weekSelector.value =
-        currentWeek;
-}
-
-}
-
-// =====================================================
-// SEMESTER STATUS
-// =====================================================
-
-function renderSemesterStatus() {
-
-const statusEl =
-    document.getElementById(
-        "semesterStatus"
-    );
-
-const startButton =
-    document.getElementById(
-        "startStudyBtn"
-    );
-
-if (!semesterStarted) {
-
-    if (statusEl) {
-
-        statusEl.innerHTML = `
-            <strong>
-                Semester not started
-            </strong>
-
-            <span
-                style="
-                    display:block;
-                    margin-top:4px;
-                    color:var(--text-muted);
-                "
-            >
-                Start whenever you're ready.
-            </span>
-        `;
-    }
-
-    if (startButton) {
-
-        startButton.disabled = false;
-
-        startButton.textContent =
-            "Start Study";
-    }
-
-    return;
-}
-
-const week =
-    calculateCurrentWeek();
-
-if (statusEl) {
-
-    statusEl.innerHTML = `
-        <strong>
-            Semester active
-        </strong>
-
-        <span
-            style="
-                display:block;
-                margin-top:4px;
-                color:var(--text-muted);
-            "
-        >
-            Started:
-            ${formatDate(
-                parseDateOnly(
-                    semesterStartDate
-                )
-            )}
-
-            · Week ${week}
-        </span>
-    `;
-}
-
-if (startButton) {
-
-    startButton.disabled = true;
-
-    startButton.textContent =
-        "Semester Started";
-}
-
-}
-
-// =====================================================
-// RENDER TASKS
-// =====================================================
-
-function renderApp() {
-
-if (!courseListEl) {
-    return;
-}
-
-courseListEl.innerHTML = "";
-
-// -----------------------------------------------
-// BEFORE SEMESTER START
-// -----------------------------------------------
-
-if (!semesterStarted) {
-
-    courseListEl.innerHTML = `
-
-        <div
-            class="clean-card"
-            style="
-                text-align:center;
-                padding:32px 20px;
-            "
-        >
-
-            <h4>
-                Semester Not Started
-            </h4>
-
-            <p
-                style="
-                    color:var(--text-muted);
-                    margin:10px 0 20px;
-                "
-            >
-                Your curriculum is ready.
-                Start whenever you're ready.
-            </p>
-
-            <button
-                class="task-btn"
-                onclick="startSemester()"
-            >
-                Start Study
-            </button>
-
-        </div>
-
-    `;
-
-    if (progressFillEl) {
-        progressFillEl.style.width =
-            "0%";
-    }
-
-    if (completionRateBadge) {
-        completionRateBadge.textContent =
-            "0%";
-    }
-
-    if (statCompletedEl) {
-        statCompletedEl.textContent =
-            "0";
-    }
-
-    if (statRemainingEl) {
-        statRemainingEl.textContent =
-            "0";
-    }
-
-    if (statCurrentWeekEl) {
-        statCurrentWeekEl.textContent =
-            "W1";
-    }
-
-    return;
-}
-
-// -----------------------------------------------
-// CURRENT WEEK
-// -----------------------------------------------
-
-const currentWeekItems =
-    syllabusData[
-        currentWeek
-    ] || [];
-
-const now =
-    new Date();
-
-let completedCount = 0;
-
-currentWeekItems.forEach(
-    session => {
-
-        const videos =
-            getSessionVideos(
-                session
-            );
-
-        const isDone =
-            sessionDone(
-                session
-            );
-
-        const isAssessment =
-            session.type ===
-            "assessment";
-
-        const isReview =
-            session.type ===
-            "review";
-
-        const allWatched =
-            videos.length > 0
-                ? sessionWatched(
-                    session
-                )
-                : false;
-
-        const scheduledDateTime =
-            getScheduledDateTime(
-                session
-            );
-
-        const isLocked =
-            scheduledDateTime &&
-            now <
-            scheduledDateTime;
-
-        if (isDone) {
-            completedCount++;
-        }
-
-        // -----------------------------------------
-        // STATUS
-        // -----------------------------------------
-
-        let badgeLabel =
-            "Ready";
-
-        let badgeClass =
-            "";
-
-        let buttonText =
-            "Mark as Done";
-
-        let buttonClass =
-            "task-btn";
-
-        let buttonDisabled =
-            false;
-
-        if (isDone) {
-
-            badgeLabel =
-                "Completed";
-
-            badgeClass =
-                "complete";
-
-            buttonText =
-                "Completed (Undo)";
-
-            buttonClass +=
-                " btn-undo";
-        }
-
-        else if (isLocked) {
-
-            badgeLabel =
-                "Upcoming";
-
-            buttonText =
-                scheduledDateTime
-                    ? `Available on ${formatDate(scheduledDateTime)}`
-                    : "Available soon";
-
-            buttonDisabled =
-                true;
-        }
-
-        else if (isReview) {
-
-            badgeLabel =
-                "Review Period";
-
-        }
-
-        else if (isAssessment) {
-
-            badgeLabel =
-                "Assessment";
-        }
-
-        else if (!allWatched) {
-
-            badgeLabel =
-                videos.length > 1
-                    ? "Watch All Lectures"
-                    : "Ready";
-
-            buttonText =
-                videos.length > 1
-                    ? "🔒 Watch All Videos to Unlock"
-                    : "🔒 Watch Video to Unlock";
-
-            buttonDisabled =
-                true;
-        }
-
-        else {
-
-            badgeLabel =
-                "Ready to Complete";
-
-            badgeClass =
-                "complete";
-        }
-
-        // -----------------------------------------
-        // PROVIDER
-        // -----------------------------------------
-
-        const provider =
-            courseCatalog[
-                session.code
-            ]?.provider || "";
-
-        // -----------------------------------------
-        // LECTURE HTML
-        // -----------------------------------------
-
-        let lectureHtml =
-            "";
-
-        if (videos.length > 0) {
-
-            lectureHtml =
-                videos
-                    .map(
-                        (
-                            video,
-                            index
-                        ) => {
-
-                            const watched =
-                                watchedState[
-                                    video.id
-                                ] === true;
-
-                            const number =
-                                getLectureNumber(
-                                    video
-                                );
-
-                            const title =
-                                getDisplayLectureTitle(
-                                    video
-                                );
-
-                            const duration =
-                                formatDuration(
-                                    video.durationSeconds
-                                );
-
-                            return `
-
-                                <div
-                                    style="
-                                        margin-bottom:
-                                            ${
-                                                index ===
-                                                videos.length - 1
-                                                    ? "0"
-                                                    : "8px"
-                                            };
-                                        line-height:
-                                            1.45;
-                                    "
-                                >
-
-                                    <a
-                                        href="${video.url}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onclick="
-                                            recordVideoWatch(
-                                                '${session.id}',
-                                                '${video.id}'
-                                            )
-                                        "
-                                    >
-
-                                        ${
-                                            number !== null
-                                                ? `Lecture ${number}`
-                                                : "Lecture"
-                                        }
-
-                                        —
-
-                                        ${title}
-
-                                        ↗
-
-                                    </a>
-
-                                    ${
-                                        duration
-                                            ? `
-                                                <span
-                                                    style="
-                                                        color:
-                                                            var(--text-muted);
-                                                        font-size:
-                                                            0.78rem;
-                                                        margin-left:
-                                                            6px;
-                                                    "
-                                                >
-                                                    ${duration}
-                                                </span>
-                                              `
-                                            : ""
-                                    }
-
-                                    ${
-                                        watched
-                                            ? `
-                                                <span
-                                                    style="
-                                                        color:
-                                                            var(--primary-green);
-                                                        font-size:
-                                                            0.78rem;
-                                                        margin-left:
-                                                            6px;
-                                                    "
-                                                >
-                                                    ✓ Watched
-                                                </span>
-                                              `
-                                            : ""
-                                    }
-
-                                </div>
-
-                            `;
-                        }
-                    )
-                    .join("");
-
-        } else {
-
-            lectureHtml = `
-                <span>
-                    ${
-                        session.details ||
-                        session.material ||
-                        "No lecture videos assigned."
-                    }
-                </span>
-            `;
-        }
-
-        // -----------------------------------------
-        // DATE
-        // -----------------------------------------
-
-        const actualClassDate =
-            getCourseDate(
-                session.week ||
-                    currentWeek,
-                session.day
-            );
-
-        // -----------------------------------------
-        // WORKLOAD
-        // -----------------------------------------
-
-        const workload =
-            session.sessionDurationSeconds
-                ? formatDuration(
-                    session.sessionDurationSeconds
-                )
-                : "";
-
-        // -----------------------------------------
-        // CARD
-        // -----------------------------------------
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-        card.className =
-            `clean-card ${
-                isDone
-                    ? "done-task"
-                    : ""
-            }`;
-
-        card.innerHTML = `
-
-            <div class="card-head">
-
-                <span
-                    class="
-                        badge
-                        badge-sub
-                    "
-                >
-                    ${session.code}
-                </span>
-
-                <span
-                    class="
-                        badge
-                        badge-status
-                        ${badgeClass}
-                    "
-                >
-                    ${badgeLabel}
-                </span>
-
-            </div>
-
-            <h4>
-                ${session.name}
-            </h4>
-
-            ${
-                provider
-                    ? `
-                        <div
-                            style="
-                                font-size:
-                                    0.78rem;
-                                color:
-                                    var(--text-muted);
-                                margin-top:
-                                    -2px;
-                                margin-bottom:
-                                    10px;
-                            "
-                        >
-                            ${provider}
-                        </div>
-                      `
-                    : ""
-            }
-
-            <div class="task-meta-line">
-
-                <span class="label">
-                    Date
-                </span>
-
-                <span>
-
-                    ${
-                        actualClassDate
-                            ? `${actualClassDate.toLocaleDateString(
-                                "en-GB",
-                                {
-                                    weekday: "long"
-                                }
-                            )}, ${formatDate(
-                                actualClassDate
-                            )}`
-                            : session.day
-                    }
-
-                    ·
-                    ${session.time}
-
-                </span>
-
-            </div>
-
-            <div class="task-meta-line">
-
-                <span class="label">
-                    Lecture
-                </span>
-
-                <div style="flex:1;">
-                    ${lectureHtml}
-                </div>
-
-            </div>
-
-            ${
-                workload
-                    ? `
-                        <div class="task-meta-line">
-
-                            <span class="label">
-                                Workload
-                            </span>
-
-                            <span>
-                                ${workload}
-                            </span>
-
-                        </div>
-                      `
-                    : ""
-            }
-
-            <div class="task-meta-line">
-
-                <span class="label">
-                    Reading
-                </span>
-
-                <span>
-                    ${
-                        session.book ||
-                        "—"
-                    }
-                </span>
-
-            </div>
-
-            <button
-                class="${buttonClass}"
-                data-stateid="${session.id}"
-                ${
-                    buttonDisabled
-                        ? "disabled"
-                        : ""
-                }
-            >
-                ${buttonText}
-            </button>
-
-        `;
-
-        const button =
-            card.querySelector(
-                "button"
-            );
-
-        if (
-            button &&
-            !buttonDisabled
-        ) {
-
-            button.addEventListener(
-                "click",
-                () =>
-                    toggleDone(
-                        session.id
-                    )
-            );
-        }
-
-        courseListEl.appendChild(
-            card
-        );
-    }
-);
-
-// -----------------------------------------------
-// PROGRESS
-// -----------------------------------------------
-
-const total =
-    currentWeekItems.length;
-
-const percentage =
-    total === 0
-        ? 0
-        : Math.round(
-            (
-                completedCount /
-                total
-            ) * 100
-        );
-
-if (progressFillEl) {
-    progressFillEl.style.width =
-        `${percentage}%`;
-}
-
-if (completionRateBadge) {
-    completionRateBadge.textContent =
-        `${percentage}%`;
-}
-
-if (statCompletedEl) {
-    statCompletedEl.textContent =
-        completedCount;
-}
-
-if (statRemainingEl) {
-    statRemainingEl.textContent =
-        total -
-        completedCount;
-}
-
-if (statCurrentWeekEl) {
-    statCurrentWeekEl.textContent =
-        `W${currentWeek}`;
-}
-
-}
-
-// =====================================================
-// 30. SYLLABUS OVERVIEW
-//
-// Week 1
-//
-//   PHIL101
-//   Intro to Logic
-//
-//   Lecture 1 — ...
-//   Lecture 2 — ...
-//
-//   POLS101
-//   Basic Political Theory
-//
-//   Lecture 1 — ...
-//
-// =====================================================
-
-function renderOverview() {
-
-const overviewEl =
-    document.getElementById(
-        "overviewContent"
-    );
-
-if (!overviewEl) {
-    return;
-}
-
-overviewEl.innerHTML =
-    "";
-
-Object.keys(
-    syllabusData
-).forEach(
-    week => {
-
-        const weekData =
-            syllabusData[
-                week
-            ] || [];
-
-        // -----------------------------------------
-        // GROUP BY COURSE
-        // -----------------------------------------
-
-        const groupedCourses =
-            {};
-
-        weekData.forEach(
-            session => {
-
-                if (
-                    !groupedCourses[
-                        session.code
-                    ]
-                ) {
-
-                    groupedCourses[
-                        session.code
-                    ] = [];
-                }
-
-                groupedCourses[
-                    session.code
-                ].push(
-                    session
-                );
-            }
-        );
-
-        // -----------------------------------------
-        // WEEK
-        // -----------------------------------------
-
-        let html = `
-
-            <div
-                class="
-                    overview-week-group
-                "
-            >
-
-                <div
-                    class="week-toggle"
-                    onclick="
-                        toggleAccordion(
-                            'week-content-${week}',
-                            this
-                        )
-                    "
-                >
-                    Week ${week}
-                    Curriculum
-                </div>
-
-                <div
-                    id="week-content-${week}"
-                    class="week-content"
-                >
-
-                    <div
-                        style="
-                            display:flex;
-                            flex-direction:column;
-                            gap:24px;
-                        "
-                    >
-
-        `;
-
-        // -----------------------------------------
-        // COURSES
-        // -----------------------------------------
-
-        Object.keys(
-            groupedCourses
-        ).forEach(
-            code => {
-
-                const sessions =
-                    groupedCourses[
-                        code
-                    ];
-
-                const firstSession =
-                    sessions[0];
-
-                html += `
-
-                    <div
-                        style="
-                            padding-bottom:
-                                20px;
-                            border-bottom:
-                                1px solid
-                                var(--border-color);
-                        "
-                    >
-
-                        <div
-                            style="
-                                display:flex;
-                                align-items:center;
-                                gap:8px;
-                                margin-bottom:
-                                    8px;
-                            "
-                        >
-
-                            <span
-                                class="
-                                    badge
-                                    badge-sub
-                                "
-                            >
-                                ${code}
-                            </span>
-
-                        </div>
-
-                        <strong
-                            style="
-                                color:
-                                    var(--text-primary);
-                                display:block;
-                                font-size:
-                                    1rem;
-                                margin-bottom:
-                                    12px;
-                            "
-                        >
-                            ${firstSession.name}
-                        </strong>
-
-                `;
-
-                // ---------------------------------
-                // EACH SESSION
-                // ---------------------------------
-
-                sessions.forEach(
-                    session => {
-
-                        const videos =
-                            getSessionVideos(
-                                session
-                            );
-
-                        if (
-                            videos.length > 0
-                        ) {
-
-                            videos.forEach(
-                                video => {
-
-                                    const number =
-                                        getLectureNumber(
-                                            video
-                                        );
-
-                                    const title =
-                                        getDisplayLectureTitle(
-                                            video
-                                        );
-
-                                    html += `
-
-                                        <div
-                                            style="
-                                                padding-left:
-                                                    12px;
-                                                margin-bottom:
-                                                    8px;
-                                                line-height:
-                                                    1.5;
-                                            "
-                                        >
-
-                                            <span
-                                                style="
-                                                    color:
-                                                        var(--primary-green);
-                                                    font-weight:
-                                                        600;
-                                                "
-                                            >
-
-                                                ${
-                                                    number !== null
-                                                        ? `Lecture ${number}`
-                                                        : "Lecture"
-                                                }
-
-                                            </span>
-
-                                            <span
-                                                style="
-                                                    color:
-                                                        var(--text-secondary);
-                                                "
-                                            >
-
-                                                —
-                                                ${title}
-
-                                            </span>
-
-                                        </div>
-
-                                    `;
-                                }
-                            );
-
-                        } else {
-
-                            html += `
-
-                                <div
-                                    style="
-                                        padding-left:
-                                            12px;
-                                        margin-bottom:
-                                            8px;
-                                    "
-                                >
-
-                                    <span
-                                        style="
-                                            color:
-                                                var(--primary-green);
-                                            font-weight:
-                                                600;
-                                        "
-                                    >
-                                        ${
-                                            session.material ||
-                                            "Academic Session"
-                                        }
-                                    </span>
-
-                                    ${
-                                        session.details
-                                            ? `
-                                                <span
-                                                    style="
-                                                        display:block;
-                                                        color:
-                                                            var(--text-secondary);
-                                                        margin-top:
-                                                            3px;
-                                                    "
-                                                >
-                                                    ${session.details}
-                                                </span>
-                                              `
-                                            : ""
-                                    }
-
-                                </div>
-
-                            `;
-                        }
-
-                        if (
-                            session.book
-                        ) {
-
-                            html += `
-
-                                <div
-                                    style="
-                                        padding-left:
-                                            12px;
-                                        margin-top:
-                                            10px;
-                                        color:
-                                            var(--text-muted);
-                                        font-size:
-                                            0.8rem;
-                                    "
-                                >
-                                    Reading:
-                                    ${session.book}
-                                </div>
-
-                            `;
-                        }
-
-                    }
-                );
-
-                html += `
-                    </div>
-                `;
-            }
-        );
-
-        html += `
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-        overviewEl.innerHTML +=
-            html;
-    }
-);
-
-}
-
-// =====================================================
-// ACCORDION
-// =====================================================
-
-window.toggleAccordion =
-function (
-contentId,
-element
-) {
-
-    const content =
-        document.getElementById(
-            contentId
-        );
-
-    if (!content) {
-        return;
-    }
-
-    content.classList.toggle(
-        "expanded"
-    );
-
-    element.classList.toggle(
-        "open"
-    );
-};
-
-// =====================================================
-// LIVE UPDATE
-// =====================================================
-
-setInterval(
-    () => {
-
-        // Always keep the top date current.
-        updateCurrentDateDisplay();
-
-        if (!semesterStarted) {
-            return;
-        }
-
-        const calculatedWeek =
-            calculateCurrentWeek();
-
-        const weekExists =
-            syllabusData[
-                String(calculatedWeek)
-            ];
-
-        if (
-            weekExists &&
-            currentWeek !==
-                String(calculatedWeek)
-        ) {
-
-            currentWeek =
-                String(calculatedWeek);
-
-            if (weekSelector) {
-                weekSelector.value =
-                    currentWeek;
-            }
-        }
-
-        renderSemesterStatus();
-        renderApp();
-
-    },
-    60 * 1000
-);
-
-// =====================================================
-// LECTURE DIRECTORY — PLAYLISTS ONLY
-// =====================================================
-
-function renderPlaylists() {
-
-    const playlistList =
-        document.getElementById("playlistList");
-
-    if (!playlistList) {
-        return;
-    }
-
-    const playlists = [
-        {
-            code: "PHIL101",
-            name: "Introduction to Logic",
-            provider: "Zachary Fruhling",
-            url: "https://www.youtube.com/playlist?list=PL2uWqdcaf189i8r_Rh-1dFLmRjKN3EwDI"
-        },
-        {
-            code: "POLS101",
-            name: "Introduction to Philosophical Politics",
-            provider: "Yale Courses",
-            url: "https://www.youtube.com/playlist?list=PL8D95DEA9B7DFE825"
-        },
-        {
-            code: "ECON101",
-            name: "Principles of Microeconomics",
-            provider: "MIT OpenCourseWare",
-            url: "https://www.youtube.com/playlist?list=PLUl4u3cNGP60V7HxLYRaJMbFzP77bzEjb"
-        },
-        {
-            code: "PHIL102",
-            name: "General Philosophy",
-            provider: "Philosophy",
-            url: "https://www.youtube.com/playlist?list=PLg4lEYaHO--SDCgjDUP1nQbn3_Fztv4LK"
-        },
-        {
-            code: "POLS102",
-            name: "Power and Politics in Today's World",
-            provider: "Yale Courses",
-            url: "https://www.youtube.com/playlist?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy"
-        },
-        {
-            code: "MATH101",
-            name: "Mathematics for Economics",
-            provider: "Lazarski Open Courses",
-            url: "https://www.youtube.com/playlist?list=PL9aqlRevPSRDsivOFyJ9b3v1ujCwBLkHs"
-        }
-    ];
-
-    playlistList.innerHTML = "";
-
-    playlists.forEach(course => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "clean-card hub-card";
-
-        card.innerHTML = `
-            <div class="card-head">
-
-                <span class="badge badge-sub">
-                    ${course.code}
-                </span>
-
-                <span class="prof-tag">
-                    ${course.provider}
-                </span>
-
-            </div>
-
-            <h4>
-                ${course.name}
-            </h4>
-
-            <a
-                href="${course.url}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="youtube-link"
-            >
-
-                <span class="youtube-icon">
-                    ▶
-                </span>
-
-                <span>
-                    Watch Playlist
-                </span>
-
-                <span class="external-icon">
-                    ↗
-                </span>
-
-            </a>
-        `;
-
-        playlistList.appendChild(card);
-    });
-}
 
 // =====================================================
 // LOAD SYLLABUS
@@ -2321,30 +1467,6 @@ async function loadSyllabus() {
         appSettings =
             data.settings || {};
 
-        // Calculate the current week from
-        // the actual Start Study date.
-        if (semesterStarted) {
-
-            const calculatedWeek =
-                calculateCurrentWeek();
-
-            const availableWeeks =
-                Object.keys(
-                    syllabusData
-                );
-
-            if (
-                availableWeeks.includes(
-                    String(calculatedWeek)
-                )
-            ) {
-
-                currentWeek =
-                    String(
-                        calculatedWeek
-                    );
-            }
-        }
 
         // Build the rest of the app
         populateDropdown();
@@ -2357,9 +1479,8 @@ async function loadSyllabus() {
 
         renderPlaylists();
 
-        // Keep the header synchronized
-        // with today's actual date.
         updateCurrentDateDisplay();
+        renderDailyWorkload();
 
     }
     catch (error) {
@@ -2394,7 +1515,5 @@ async function loadSyllabus() {
 // =====================================================
 // START
 // =====================================================
-
-updateCurrentDateDisplay();
 
 loadSyllabus();
