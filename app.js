@@ -2998,13 +2998,10 @@ function renderOverview() {
                         overview-week-group
                     "
                 >
-
-                    <div
-                        class="
-                            week-toggle
-                        "
-                        onclick="toggleAccordion(this)"
-                    >
+                <div
+                    class="week-toggle"
+                    onclick="toggleAccordion(this)"
+                >
 
                         <span>
                             Week ${week}
@@ -3019,10 +3016,7 @@ function renderOverview() {
                     </div>
 
 
-                    <div
-                        id="week-content-${week}
-                        class="week-content"
-                    >
+                   <div id="week-content-${week}" class="week-content">
 
                         <div
                             style="
