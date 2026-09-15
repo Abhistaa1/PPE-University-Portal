@@ -3279,31 +3279,24 @@ function renderOverview() {
 // 27. ACCORDION
 // =====================================================
 
-window.toggleAccordion =
-function (
-    contentId,
-    element
-) {
-
-    const content =
-        document.getElementById(
-            contentId
-        );
-
+window.toggleAccordion = function (contentId, element) {
+    const content = document.getElementById(contentId);
 
     if (!content) {
         return;
     }
 
+    const isOpen = content.dataset.open === "true";
 
-    content.classList.toggle(
-        "expanded"
-    );
-
-
-    element.classList.toggle(
-        "open"
-    );
+    if (isOpen) {
+        content.dataset.open = "false";
+        content.style.display = "none";
+        element.classList.remove("open");
+    } else {
+        content.dataset.open = "true";
+        content.style.display = "block";
+        element.classList.add("open");
+    }
 };
 
 
