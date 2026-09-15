@@ -24,18 +24,6 @@ JSON.stringify(progress)
 } catch (error) {
 console.error("Could not save progress:", error);
 }
-function updateCurrentDateDisplay() {
-    const el = document.getElementById("currentDateDisplay");
-
-    if (!el) return;
-
-    const today = new Date();
-
-    el.textContent = today.toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    });
 }
 
 // Current completed sessions
@@ -2215,10 +2203,4 @@ setInterval(
 // =====================================================
 
 updateCurrentDateDisplay();
-loadSyllabus();
-// =====================================================
-// START
-// =====================================================
-
-updateCurrentDateDisplay();   
 loadSyllabus();
