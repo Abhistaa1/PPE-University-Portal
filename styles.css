@@ -2190,10 +2190,7 @@ svg {
     cursor: pointer;
     user-select: none;
 
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        border-radius 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .week-toggle:hover {
@@ -2201,32 +2198,32 @@ svg {
 }
 
 .week-toggle.open {
+    background: rgba(0, 255, 170, 0.07);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    background: rgba(0, 255, 170, 0.07);
 }
 
+/* CLOSED */
 .week-content {
-    display: grid;
-    grid-template-rows: 0fr;
+    max-height: 0;
     overflow: hidden;
-
-    padding: 0 20px;
     opacity: 0;
 
+    padding-left: 20px;
+    padding-right: 20px;
+
     transition:
-        grid-template-rows 0.3s ease,
+        max-height 0.35s ease,
         opacity 0.25s ease,
-        padding 0.3s ease;
+        padding-top 0.35s ease,
+        padding-bottom 0.35s ease;
 }
 
+/* OPEN */
 .week-content.expanded {
-    grid-template-rows: 1fr;
+    max-height: 5000px;
+    opacity: 1;
+
     padding-top: 20px;
     padding-bottom: 20px;
-    opacity: 1;
-}
-
-.week-content > div {
-    min-height: 0;
 }
