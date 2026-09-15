@@ -248,6 +248,23 @@ return date.toLocaleDateString(
 
 }
 
+function updateCurrentDateDisplay() {
+    const dateEl = document.getElementById("currentDateDisplay");
+
+    if (!dateEl) {
+        return;
+    }
+
+    const today = new Date();
+
+    dateEl.textContent = today.toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long"
+    });
+}
+
+
 function parseTime(timeString) {
 
 const parts =
