@@ -505,3 +505,191 @@ body {
 .reset-progress-btn:active {
     transform: scale(0.98);
 }
+
+/* =====================================================
+   MOBILE OPTIMIZATION
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+    /* Main app width */
+    .mobile-frame {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0 16px 110px;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    .app-header {
+        padding: 18px 0 12px;
+    }
+
+    .greeting {
+        font-size: 1.65rem;
+        line-height: 1.15;
+    }
+
+    .sub-date {
+        font-size: 0.78rem;
+    }
+
+    /* General cards */
+    .clean-card {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 18px;
+        margin-bottom: 16px;
+        border-radius: 20px;
+    }
+
+    /* Course title */
+    .clean-card h4 {
+        font-size: 1.15rem;
+        line-height: 1.3;
+        margin: 8px 0;
+    }
+
+    /* Meta information */
+    .task-meta-line {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.86rem;
+        line-height: 1.45;
+        margin: 8px 0;
+    }
+
+    .task-meta-line .label {
+        min-width: 58px;
+        flex-shrink: 0;
+    }
+
+    /* Lecture container */
+    .task-meta-line > div {
+        min-width: 0;
+        width: 100%;
+    }
+
+    /* Lecture links */
+    .task-meta-line a {
+        display: inline;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    /* Individual lecture rows */
+    .task-meta-line div > div {
+        margin-bottom: 12px !important;
+    }
+
+    /* Watch status */
+    .task-meta-line span {
+        overflow-wrap: anywhere;
+    }
+
+    /* Mark watched button */
+    .mark-watched-btn,
+    .watch-btn,
+    .lecture-watch-btn {
+        width: auto;
+        max-width: 100%;
+        padding: 9px 14px;
+        font-size: 0.82rem;
+        border-radius: 999px;
+    }
+
+    /* Task buttons */
+    .task-btn {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    /* Reset button */
+    .reset-progress-btn {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 16px;
+        border-radius: 14px;
+        box-sizing: border-box;
+    }
+
+    /* Progress controls */
+    .progress-controls-card {
+        margin-top: 20px !important;
+        margin-bottom: 110px !important;
+    }
+
+    /* Bottom navigation */
+    .bottom-nav {
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        width: auto;
+        max-width: none;
+        border-radius: 28px;
+    }
+
+    .nav-item {
+        min-width: 0;
+        padding: 10px 4px;
+        font-size: 0.72rem;
+    }
+
+    /* Hide accidental duplicated lecture summary */
+    .lecture-summary {
+        display: none;
+    }
+
+    /* Prevent horizontal overflow */
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+
+/* =====================================================
+   EXTRA SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    .mobile-frame {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .clean-card {
+        padding: 15px;
+        border-radius: 18px;
+    }
+
+    .clean-card h4 {
+        font-size: 1.05rem;
+    }
+
+    .task-meta-line {
+        font-size: 0.82rem;
+    }
+
+    .task-meta-line a {
+        font-size: 0.88rem;
+    }
+
+    .nav-item {
+        font-size: 0.68rem;
+    }
+}
