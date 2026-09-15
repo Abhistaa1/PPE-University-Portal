@@ -816,34 +816,89 @@ function (sessionId) {
 };
 
 // =====================================================
-// RESET ALL PROGRESS
+// RESET EVERYTHING — RETURN TO START STUDY
 // =====================================================
 
 window.resetProgress = function () {
 
-const confirmed = window.confirm(
-    "Reset all progress?\n\n" +
-    "This will erase watched lectures and completed sessions.\n\n" +
-    "Your syllabus, schedule, and lecture links will NOT be changed."
-);
+    const confirmed = window.confirm(
+        "Reset your semester?\n\n" +
+        "This will erase:\n" +
+        "• Watched lectures\n" +
+        "• Completed sessions\n" +
+        "• Attendance\n" +
+        "• Semester start status\n\n" +
+        "Your syllabus, schedule, and lecture links will NOT be changed."
+    );
 
-if (!confirmed) {
-    return;
-}
+    if (!confirmed) {
+        return;
+    }
 
-// Clear progress data
-localStorage.removeItem("ppe_progress_state");
-localStorage.removeItem("ppe_watched_state");
-localStorage.removeItem("ppe_completed_sessions");
-localStorage.removeItem("ppe_attendance_state");
+    // -----------------------------------------
+    // 1. CLEAR ALL PROGRESS
+    // -----------------------------------------
 
-// Reset in-memory state
-progressState = {};
-watchedState = {};
-completedSessions = {};
+    localStorage.removeItem("ppe_progress_state");
+    localStorage.removeItem("ppe_watched_state");
+    localStorage.removeItem("ppe_completed_sessions");
+    localStorage.removeItem("ppe_attendance_state");
 
-// Reload the app from the cleared state.
-window.location.reload();
+    // -----------------------------------------
+    // 2. CLEAR SEMESTER START
+    // -----------------------------------------
+
+    localStorage.removeItem("semester_started");
+    localStorage.removeItem("semester_start_date");
+
+    // -----------------------------------------
+    // 3. RESET MEMORY STATE
+    // -----------------------------------------
+
+    progressState = {};
+    watchedState = {};
+    completedSessions = {};
+
+    semesterStarted = false;
+    semesterStartDate = null;
+
+    // -----------------------------------------
+    // 4. RETURN TO WEEK 1
+    // -----------------------------------------
+
+    currentWeek = "1";
+
+    // -----------------------------------------
+    // 5. SHOW START STUDY SCREEN
+    // -----------------------------------------
+
+    if (typeof renderSemesterStatus === "function") {
+        renderSemesterStatus();
+    }
+
+    renderApp();
+    renderOverview();
+
+    // -----------------------------------------
+    // 6. GO TO MAIN STUDY TAB
+    // -----------------------------------------
+
+    window.switchTab("trackerTab");
+
+    // -----------------------------------------
+    // 7. SCROLL TO TOP
+    // -----------------------------------------
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+
+    // -----------------------------------------
+    // 8. CONFIRM
+    // -----------------------------------------
+
+    alert("Semester reset. Welcome back, Scholar.");
 
 };
 
