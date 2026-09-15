@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Personal University Portal</title>
 
@@ -16,21 +18,24 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="PPE">
+
 </head>
 
 <body>
 
 <div class="mobile-frame">
 
-    <!-- ========================================= -->
-    <!-- HEADER -->
-    <!-- ========================================= -->
+    <!-- =================================================
+         HEADER
+         ================================================= -->
 
     <header class="app-header">
 
         <div class="user-meta">
 
-            <span class="sub-date" id="currentDateDisplay"></span>
+            <span class="sub-date" id="currentDateDisplay">
+                Monday, 14 September
+            </span>
 
             <h2 class="greeting">
                 Welcome, Scholar
@@ -38,51 +43,43 @@
 
         </div>
 
-        <div class="avatar-badge">
-            <span>PPE</span>
+        <div class="ppe-logo">
+            PPE
         </div>
 
     </header>
 
 
-    <!-- ========================================= -->
-    <!-- MAIN CONTENT -->
-    <!-- ========================================= -->
+    <!-- =================================================
+         TAB 1 — TASKS
+         ================================================= -->
 
-    <main class="main-content">
+    <main id="trackerTab" class="tab-content active">
 
+        <section>
 
-        <!-- ========================================= -->
-        <!-- TAB 1: TRACKER -->
-        <!-- ========================================= -->
+            <div class="progress-card clean-card">
 
-        <section
-            id="trackerTab"
-            class="tab-content active">
+                <div class="progress-header">
 
-            <div class="hero-metric-card">
-
-                <div class="hero-left">
-
-                    <span class="metric-title">
+                    <strong>
                         Today's Progress
+                    </strong>
+
+                    <span id="completionRateBadge">
+                        0%
                     </span>
-
-                    <div class="progress-bar-wrap">
-
-                        <div
-                            class="progress-fill"
-                            id="progressFill">
-                        </div>
-
-                    </div>
 
                 </div>
 
-                <div
-                    class="hero-badge"
-                    id="completionRateBadge">
-                    0%
+                <div class="progress-bar">
+
+                    <div
+                        id="progressFill"
+                        class="progress-fill"
+                        style="width:0%;">
+                    </div>
+
                 </div>
 
             </div>
@@ -90,51 +87,43 @@
 
             <!-- SEMESTER METRICS -->
 
-            <div class="section-row">
-                <h3>Semester Metrics</h3>
-            </div>
+            <h3>
+                Semester Metrics
+            </h3>
 
-            <div class="stats-row">
+            <div class="metrics-grid">
 
-                <div class="stat-pill">
+                <div class="metric-card">
 
-                    <span
-                        class="stat-val"
-                        id="statCompleted">
+                    <strong id="statCompleted">
                         0
-                    </span>
+                    </strong>
 
-                    <span class="stat-lbl">
+                    <span>
                         Completed
                     </span>
 
                 </div>
 
+                <div class="metric-card">
 
-                <div class="stat-pill">
-
-                    <span
-                        class="stat-val"
-                        id="statRemaining">
+                    <strong id="statRemaining">
                         0
-                    </span>
+                    </strong>
 
-                    <span class="stat-lbl">
+                    <span>
                         Remaining
                     </span>
 
                 </div>
 
+                <div class="metric-card">
 
-                <div class="stat-pill">
-
-                    <span
-                        class="stat-val"
-                        id="statCurrentWeek">
+                    <strong id="statCurrentWeek">
                         W1
-                    </span>
+                    </strong>
 
-                    <span class="stat-lbl">
+                    <span>
                         Term Phase
                     </span>
 
@@ -143,350 +132,138 @@
             </div>
 
 
-            <!-- WEEK SELECTOR -->
+            <!-- CURRICULUM -->
 
-            <div class="week-filter-row">
+            <div class="section-heading">
 
                 <h3>
                     Curriculum
                 </h3>
 
-                <div class="select-pill-wrapper">
-
-                    <select id="weekSelector">
-                    </select>
-
-                </div>
+                <select id="weekSelector">
+                    <option value="1">
+                        Week 1
+                    </option>
+                </select>
 
             </div>
 
 
-            <!-- COURSE CARDS -->
+            <!-- JS INSERTS WEEKLY COURSES HERE -->
 
             <div
                 id="courseList"
-                class="cards-grid">
+                class="timeline-list">
             </div>
 
         </section>
 
+    </main>
 
 
-        <!-- ========================================= -->
-        <!-- TAB 2: LECTURES -->
-        <!-- ========================================= -->
+    <!-- =================================================
+         TAB 2 — LECTURES
+         ================================================= -->
 
-        <section
-            id="playlistTab"
-            class="tab-content">
+    <main id="playlistTab" class="tab-content">
 
-            <div class="section-row">
+        <section>
 
-                <h3>
-                    Primary Lecture Hubs
-                </h3>
+            <h2>
+                Lectures
+            </h2>
 
-            </div>
+            <div class="clean-card">
 
+                <div class="card-head">
 
-            <div class="playlist-grid">
+                    <span class="badge badge-sub">
+                        LECTURES
+                    </span>
 
-
-                <!-- PHIL101 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            PHIL101
-                        </span>
-
-                        <span class="prof-tag">
-                            Zachary Fruhling
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Introduction to Logic
-                    </h4>
-
-                    <p>
-                        Formal logical structures,
-                        syllogisms, truth tables,
-                        and deductive calculus.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PL2uWqdcaf189i8r_Rh-1dFLmRjKN3EwDI"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
+                    <span>
+                        ▶
+                    </span>
 
                 </div>
 
-
-                <!-- POLS101 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            POLS101
-                        </span>
-
-                        <span class="prof-tag">
-                            Yale University
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Basic Political Theory
-                    </h4>
-
-                    <p>
-                        Foundations of the state with
-                        Steven B. Smith: Plato, Hobbes,
-                        Locke, and Rousseau.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PL8D95DEA9B7DFE825"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
-
-                </div>
-
-
-                <!-- ECON101 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            ECON101
-                        </span>
-
-                        <span class="prof-tag">
-                            MIT OpenCourseWare
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Principles of Microeconomics
-                    </h4>
-
-                    <p>
-                        Introduction to microeconomic
-                        theory and economic decision-making.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PLUl4u3cNGP60V7HxLYRaJMbFzP77bzEjb"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
-
-                </div>
-
-
-                <!-- PHIL102 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            PHIL102
-                        </span>
-
-                        <span class="prof-tag">
-                            Philosophy
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Introduction to Philosophy
-                    </h4>
-
-                    <p>
-                        Foundations and major questions
-                        in philosophical thought.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PLg4lEYaHO--SDCgjDUP1nQbn3_Fztv4LK"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
-
-                </div>
-
-
-                <!-- POLS102 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            POLS102
-                        </span>
-
-                        <span class="prof-tag">
-                            Yale
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Power and Politics
-                    </h4>
-
-                    <p>
-                        Power, institutions, political
-                        systems, and contemporary politics.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
-
-                </div>
-
-
-                <!-- MATH101 -->
-
-                <div class="clean-card hub-card">
-
-                    <div class="card-head">
-
-                        <span class="badge badge-sub">
-                            MATH101
-                        </span>
-
-                        <span class="prof-tag">
-                            Mathematics
-                        </span>
-
-                    </div>
-
-                    <h4>
-                        Mathematics for Economics
-                    </h4>
-
-                    <p>
-                        Mathematical foundations used
-                        throughout economics.
-                    </p>
-
-                    <a
-                        href="https://www.youtube.com/playlist?list=PL9aqlRevPSRDsivOFyJ9b3v1ujCwBLkHsE"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
-
-                        Launch Playlist ↗
-
-                    </a>
-
-                </div>
+                <h4>
+                    Course Lectures
+                </h4>
+
+                <p style="
+                    color:var(--text-muted);
+                    font-size:0.9rem;
+                    line-height:1.5;
+                ">
+                    Your scheduled lectures and video
+                    materials appear here.
+                </p>
 
             </div>
 
         </section>
 
+    </main>
 
 
-        <!-- ========================================= -->
-        <!-- TAB 3: SYLLABUS -->
-        <!-- ========================================= -->
+    <!-- =================================================
+         TAB 3 — SYLLABUS
+         ================================================= -->
 
-        <section
-            id="syllabusTab"
-            class="tab-content">
+    <main id="overviewTab" class="tab-content">
 
-            <div class="section-row">
+        <section>
 
-                <h3>
-                    Semester Syllabus
-                </h3>
+            <h2>
+                Semester Syllabus
+            </h2>
 
-            </div>
-
-            <div id="overviewContent">
+            <div
+                id="overviewContent"
+                class="overview-content">
             </div>
 
         </section>
 
+    </main>
 
 
-        <!-- ========================================= -->
-        <!-- TAB 4: DOSSIER -->
-        <!-- ========================================= -->
+    <!-- =================================================
+         TAB 4 — DOSSIER
+         ================================================= -->
 
-        <section
-            id="profileTab"
-            class="tab-content">
+    <main id="profileTab" class="tab-content">
 
+        <section>
 
-            <!-- ACADEMIC STANDING -->
-
-            <div class="section-row">
-
-                <h3>
-                    Academic Standing
-                </h3>
-
-            </div>
+            <h2>
+                Academic Standing
+            </h2>
 
 
-            <div class="clean-card profile-summary-card">
+            <!-- PROFILE -->
 
-                <div class="avatar-large">
+            <div class="clean-card profile-card">
+
+                <div class="profile-avatar">
                     AF
                 </div>
 
-                <div class="profile-details">
+                <div>
 
-                    <h4>
+                    <h3 style="margin:0;">
                         Muhamad Abhista Firdaus
-                    </h4>
+                    </h3>
 
-                    <span class="program-tag">
+                    <span class="badge badge-sub">
                         Year 1 · Semester 1
                     </span>
 
-                    <p class="institution">
+                    <p style="
+                        margin:6px 0 0;
+                        color:var(--text-secondary);
+                    ">
                         Curriculum: Oxford / Yale / MIT Standard
                     </p>
 
@@ -497,31 +274,23 @@
 
             <!-- CORE MILESTONES -->
 
-            <div class="section-row">
+            <h3>
+                Core Milestones
+            </h3>
 
-                <h3>
-                    Core Milestones
-                </h3>
+            <div class="milestones">
 
-            </div>
+                <div class="milestone">
 
+                    <span class="milestone-dot active">
+                    </span>
 
-            <div class="timeline-list">
+                    <div>
 
-
-                <!-- WEEK 1 -->
-
-                <div class="timeline-item">
-
-                    <div class="timeline-marker active">
-                    </div>
-
-                    <div class="timeline-body">
-
-                        <h5>
-                            Week 1:
-                            Quantitative & Formal Foundation
-                        </h5>
+                        <strong>
+                            Week 1: Quantitative &amp;
+                            Formal Foundation
+                        </strong>
 
                         <p>
                             Deduction vs induction,
@@ -534,19 +303,17 @@
                 </div>
 
 
-                <!-- WEEK 4 -->
+                <div class="milestone">
 
-                <div class="timeline-item">
+                    <span class="milestone-dot">
+                    </span>
 
-                    <div class="timeline-marker">
-                    </div>
+                    <div>
 
-                    <div class="timeline-body">
-
-                        <h5>
-                            Week 4:
-                            Modern Realpolitik Transition
-                        </h5>
+                        <strong>
+                            Week 4: Modern Realpolitik
+                            Transition
+                        </strong>
 
                         <p>
                             Shift from ancient philosophy
@@ -559,24 +326,20 @@
                 </div>
 
 
-                <!-- WEEK 7-8 -->
+                <div class="milestone">
 
-                <div class="timeline-item">
+                    <span class="milestone-dot">
+                    </span>
 
-                    <div class="timeline-marker">
-                    </div>
+                    <div>
 
-                    <div class="timeline-body">
-
-                        <h5>
-                            Week 7–8:
-                            Midterm Consolidation
-                        </h5>
+                        <strong>
+                            Week 7–8: Midterm Consolidation
+                        </strong>
 
                         <p>
                             Midterm self-examination;
-                            draft analytical essay on Hobbesian
-                            Sovereignty vs. Lockean Property.
+                            analytical essay preparation.
                         </p>
 
                     </div>
@@ -584,23 +347,21 @@
                 </div>
 
 
-                <!-- WEEK 12 -->
+                <div class="milestone">
 
-                <div class="timeline-item">
+                    <span class="milestone-dot">
+                    </span>
 
-                    <div class="timeline-marker">
-                    </div>
+                    <div>
 
-                    <div class="timeline-body">
-
-                        <h5>
-                            Week 12:
-                            Advanced Optimization & Regimes
-                        </h5>
+                        <strong>
+                            Week 12: Advanced Optimization
+                            &amp; Regimes
+                        </strong>
 
                         <p>
                             Lagrange multipliers,
-                            asymmetric information problems,
+                            asymmetric information,
                             and democratic backsliding.
                         </p>
 
@@ -609,19 +370,16 @@
                 </div>
 
 
-                <!-- WEEK 14 -->
+                <div class="milestone">
 
-                <div class="timeline-item">
+                    <span class="milestone-dot">
+                    </span>
 
-                    <div class="timeline-marker">
-                    </div>
+                    <div>
 
-                    <div class="timeline-body">
-
-                        <h5>
-                            Week 14:
-                            Semester Capstone
-                        </h5>
+                        <strong>
+                            Week 14: Semester Capstone
+                        </strong>
 
                         <p>
                             Complete full problem sets
@@ -632,20 +390,15 @@
 
                 </div>
 
-
             </div>
 
 
-            <!-- ===================================== -->
-            <!-- RESET PROGRESS -->
-            <!-- ===================================== -->
+            <!-- =================================================
+                 PROGRESS CONTROLS
+                 ================================================= -->
 
             <div
-                class="clean-card progress-controls-card"
-                style="
-                    margin-top: 32px;
-                    margin-bottom: 120px;
-                ">
+                class="clean-card progress-controls-card">
 
                 <div class="card-head">
 
@@ -659,30 +412,27 @@
 
                 </div>
 
-
                 <h4>
                     Progress Controls
                 </h4>
-
 
                 <p style="
                     color:var(--text-muted);
                     font-size:0.85rem;
                     line-height:1.5;
                 ">
-
                     Manage your lecture completion
                     and watch history.
-
                 </p>
-
 
                 <button
                     type="button"
                     class="reset-progress-btn"
                     onclick="resetProgress()">
 
-                    <span>↻</span>
+                    <span>
+                        ↻
+                    </span>
 
                     <span>
                         Reset Progress
@@ -692,24 +442,27 @@
 
             </div>
 
-
         </section>
-
 
     </main>
 
 
-    <!-- ========================================= -->
-    <!-- BOTTOM NAVIGATION -->
-    <!-- ========================================= -->
+    <!-- =================================================
+         BOTTOM NAVIGATION
+         ================================================= -->
 
     <nav class="bottom-nav">
 
-        <button
-            class="nav-item active"
-            onclick="switchTab('trackerTab', this)">
+        <!-- TASKS -->
 
-            <span>▣</span>
+        <button
+            type="button"
+            class="nav-item active"
+            onclick="switchTab('trackerTab')">
+
+            <span class="nav-icon">
+                ▣
+            </span>
 
             <span>
                 Tasks
@@ -718,11 +471,16 @@
         </button>
 
 
-        <button
-            class="nav-item"
-            onclick="switchTab('playlistTab', this)">
+        <!-- LECTURES -->
 
-            <span>▷</span>
+        <button
+            type="button"
+            class="nav-item"
+            onclick="switchTab('playlistTab')">
+
+            <span class="nav-icon">
+                ▶
+            </span>
 
             <span>
                 Lectures
@@ -731,11 +489,16 @@
         </button>
 
 
-        <button
-            class="nav-item"
-            onclick="switchTab('syllabusTab', this)">
+        <!-- SYLLABUS -->
 
-            <span>☷</span>
+        <button
+            type="button"
+            class="nav-item"
+            onclick="switchTab('overviewTab')">
+
+            <span class="nav-icon">
+                ☷
+            </span>
 
             <span>
                 Syllabus
@@ -744,11 +507,16 @@
         </button>
 
 
-        <button
-            class="nav-item"
-            onclick="switchTab('profileTab', this)">
+        <!-- DOSSIER -->
 
-            <span>♙</span>
+        <button
+            type="button"
+            class="nav-item"
+            onclick="switchTab('profileTab')">
+
+            <span class="nav-icon">
+                ♙
+            </span>
 
             <span>
                 Dossier
@@ -761,39 +529,47 @@
 </div>
 
 
-<!-- ========================================= -->
-<!-- PWA SERVICE WORKER -->
-<!-- ========================================= -->
+<!-- =================================================
+     APP JAVASCRIPT
+     ================================================= -->
+
+<script src="./app.js"></script>
+
+
+<!-- =================================================
+     PWA SERVICE WORKER
+     ================================================= -->
 
 <script>
 
 if ("serviceWorker" in navigator) {
 
-    window.addEventListener(
-        "load",
-        () => {
+    window.addEventListener("load", function () {
 
-            navigator.serviceWorker
-                .register("./service-worker.js")
-                .catch(
-                    error =>
-                        console.error(
-                            "PWA service worker:",
-                            error
-                        )
+        navigator.serviceWorker
+            .register("./service-worker.js")
+            .then(function () {
+
+                console.log(
+                    "PWA service worker registered."
                 );
 
-        }
-    );
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "PWA service worker error:",
+                    error
+                );
+
+            });
+
+    });
 
 }
 
 </script>
 
-
-<!-- YOUR APP JAVASCRIPT -->
-
-<script src="./app.js?v=4"></script>
-
 </body>
+
 </html>
