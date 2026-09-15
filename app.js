@@ -3003,12 +3003,7 @@ function renderOverview() {
                         class="
                             week-toggle
                         "
-                        onclick="
-                            toggleAccordion(
-                                'week-content-${week}',
-                                this
-                            )
-                        "
+                        onclick="toggleAccordion(this)"
                     >
 
                         <span>
@@ -3279,18 +3274,17 @@ function renderOverview() {
 // 27. ACCORDION
 // =====================================================
 
-window.toggleAccordion = function (contentId, element) {
-    const content = document.getElementById(contentId);
+window.toggleAccordion = function (element) {
+    const content = element.nextElementSibling;
 
     if (!content) {
-        console.error("Accordion content not found:", contentId);
+        console.error("Accordion content not found");
         return;
     }
 
     content.classList.toggle("expanded");
     element.classList.toggle("open");
 };
-
 
 // =====================================================
 // 28. PLAYLIST DIRECTORY
