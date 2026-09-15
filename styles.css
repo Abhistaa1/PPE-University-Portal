@@ -1167,7 +1167,7 @@ svg {
     padding: 0 14px 16px;
 }
 
-.week-content.open {
+.week-content.expanded {
     display: block;
 }
 
