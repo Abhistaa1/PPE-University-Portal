@@ -842,81 +842,11 @@ progressState = {};
 watchedState = {};
 completedSessions = {};
 
-// Rebuild the app
-renderApp();
-renderOverview();
-
-alert("Progress has been reset.");
+// Reload the app from the cleared state.
+window.location.reload();
 
 };
 
-// Remove an existing copy first
-const oldCard =
-    document.getElementById("resetProgressCard");
-
-if (oldCard) {
-    oldCard.remove();
-}
-
-const card =
-    document.createElement("div");
-
-card.id = "resetProgressCard";
-
-card.className =
-    "clean-card progress-controls-card";
-
-card.style.marginTop =
-    "24px";
-
-card.style.marginBottom =
-    "110px";
-
-card.innerHTML = `
-
-    <div class="card-head">
-
-        <span class="badge badge-sub">
-            DATA
-        </span>
-
-        <span style="font-size:1.2rem;">
-            ⚙️
-        </span>
-
-    </div>
-
-    <h4>
-        Progress Controls
-    </h4>
-
-    <p style="
-        color:var(--text-muted);
-        font-size:0.85rem;
-        line-height:1.5;
-    ">
-        Manage your lecture completion
-        and watch history.
-    </p>
-
-    <button
-        type="button"
-        class="reset-progress-btn"
-        onclick="resetProgress()"
-    >
-
-        <span>↻</span>
-
-        <span>
-            Reset Progress
-        </span>
-
-    </button>
-`;
-
-profileTab.appendChild(card);
-
-}
 // =====================================================
 // LOAD SYLLABUS
 // =====================================================
@@ -983,7 +913,6 @@ try {
 
     renderOverview();
 
-    renderResetControl();
 
 } catch (error) {
 
@@ -1367,7 +1296,7 @@ currentWeekItems.forEach(
             badgeLabel =
                 videos.length > 1
                     ? "Watch All Lectures"
-                    : "Attendance Required";
+                    : "Ready";
 
             buttonText =
                 videos.length > 1
@@ -1381,7 +1310,7 @@ currentWeekItems.forEach(
         else {
 
             badgeLabel =
-                "Attended · In Progress";
+                "Ready to Complete";
 
             badgeClass =
                 "complete";
