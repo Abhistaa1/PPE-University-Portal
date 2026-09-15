@@ -2215,4 +2215,5 @@ setInterval(
 // START
 // =====================================================
 
+UpdateCurrentDateDisplay();     
 loadSyllabus();
