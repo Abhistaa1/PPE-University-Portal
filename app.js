@@ -2174,46 +2174,51 @@ element
 // =====================================================
 
 setInterval(
-() => {
+    () => {
 
-    if (!semesterStarted) {
-        return;
-    }
-
-    const calculatedWeek =
-        calculateCurrentWeek();
-
-    const weekExists =
-        syllabusData[
-            String(calculatedWeek)
-        ];
-
-    if (
-        weekExists &&
-        currentWeek !==
-            String(calculatedWeek)
-    ) {
-
-        currentWeek =
-            String(calculatedWeek);
-
-        if (weekSelector) {
-            weekSelector.value =
-                currentWeek;
+        if (!semesterStarted) {
+            return;
         }
-    }
 
-    renderSemesterStatus();
-    renderApp();
+        const calculatedWeek =
+            calculateCurrentWeek();
 
-},
-60 * 1000
+        const weekExists =
+            syllabusData[
+                String(calculatedWeek)
+            ];
 
+        if (
+            weekExists &&
+            currentWeek !==
+                String(calculatedWeek)
+        ) {
+
+            currentWeek =
+                String(calculatedWeek);
+
+            if (weekSelector) {
+                weekSelector.value =
+                    currentWeek;
+            }
+        }
+
+        renderSemesterStatus();
+        renderApp();
+
+    },
+    60 * 1000
 );
 
 // =====================================================
 // START
 // =====================================================
 
-UpdateCurrentDateDisplay();     
+updateCurrentDateDisplay();
+loadSyllabus();
+// =====================================================
+// START
+// =====================================================
+
+updateCurrentDateDisplay();   
 loadSyllabus();
