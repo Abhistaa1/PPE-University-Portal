@@ -2269,15 +2269,21 @@ function renderPlaylists() {
     playlistList.innerHTML = "";
 
     const courses =
-        Object.values(courseCatalog);
+        Object.values(courseCatalog || {});
 
     if (courses.length === 0) {
+
         playlistList.innerHTML = `
             <div class="clean-card">
-                <h4>No lecture hubs available</h4>
+
+                <h4>
+                    No lecture hubs available
+                </h4>
+
                 <p>
                     Lecture data has not been loaded yet.
                 </p>
+
             </div>
         `;
 
@@ -2315,48 +2321,121 @@ function renderPlaylists() {
             </h4>
 
             <p>
-                ${course.description ||
-                  course.details ||
-                  "Course lecture materials."}
+                ${
+                    course.description ||
+                    course.details ||
+                    "Course lecture materials."
+                }
             </p>
 
             ${
                 course.url
-                ? `
-                    <a
-                        href="${course.url}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="action-btn">
+                    ? `
+                        <a
+                            href="${course.url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="action-btn">
 
-                        Launch Playlist ↗
+                            Launch Playlist ↗
 
-                    </a>
-                  `
-                : `
-                    <span
-                        style="
-                            color:var(--text-muted);
-                            font-size:0.78rem;
-                        ">
+                        </a>
+                      `
+                    : `
+                        <span
+                            style="
+                                color:var(--text-muted);
+                                font-size:0.78rem;
+                            ">
 
-                        No playlist link available.
+                            No playlist link available.
 
-                    </span>
-                  `
+                        </span>
+                      `
             }
 
         `;
 
         playlistList.appendChild(card);
-
     });
 }
+
+
+// =====================================================
+// LOAD SYLLABUS
+// =====================================================
+
+async function loadSyllabus() {
+
+    try {
+
+        const response =
+            await fetch("./data/syllabus.json", {
+                cache: "no-store"
+            });
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        const data =
+            await response.json();
+
+        syllabusData =
+            data.weeks || {};
+
+        courseCatalog =
+            data.courses || {};
+
+        appSettings =
+            data.settings || {};
+
+
+        // Build the rest of the app
+        populateDropdown();
+
+        renderSemesterStatus();
+
+        renderApp();
+
+        renderOverview();
+
+        renderPlaylists();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Failed to load syllabus:",
+            error
+        );
+
+        if (courseListEl) {
+
+            courseListEl.innerHTML = `
+                <p style="
+                    color:red;
+                    text-align:center;
+                ">
+                    Unable to load
+                    data/syllabus.json.
+
+                    <br><br>
+
+                    ${error.message}
+                </p>
+            `;
+
+        }
+
+    }
+}
+
+
 // =====================================================
 // START
 // =====================================================
 
-populateDropdown();
-renderApp();
-renderOverview();
-renderPlaylists();
+loadSyllabus();
