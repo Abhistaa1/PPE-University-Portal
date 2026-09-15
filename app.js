@@ -3025,12 +3025,8 @@ function renderOverview() {
 
 
                     <div
-                        id="
-                            week-content-${week}
-                        "
-                        class="
-                            week-content
-                        "
+                        id="week-content-${week}
+                        "class="week-content"
                     >
 
                         <div
